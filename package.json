@@ -1,10 +1,10 @@
 {
-  "name": "ts",
+  "name": "4everland-sdk",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/yipcing.cjs.js",
-  "module": "./dist/yipcing.esm.js",
-  "browser": "./dist/yipcing.umd.min.js",
+  "main": "./dist/foreverland.cjs.js",
+  "module": "./dist/foreverland.esm.js",
+  "browser": "./dist/foreverland.umd.min.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

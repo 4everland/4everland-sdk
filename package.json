@@ -1,0 +1,51 @@
+{
+  "name": "ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/yipcing.cjs.js",
+  "module": "./dist/yipcing.esm.js",
+  "browser": "./dist/yipcing.umd.min.js",
+  "types": "./dist/types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "rollup -c --w --bundleConfigAsCjs",
+    "build:dev": "rollup -c --bundleConfigAsCjs NODE_ENV=development",
+    "build": "rollup -c --bundleConfigAsCjs NODE_ENV=development"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/types": "^3.391.0",
+    "@babel/core": "^7.22.10",
+    "@babel/preset-env": "^7.22.10",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/node": "^20.5.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "eslint": "^8.47.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.1",
+    "rollup": "^3.28.0",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "tslib": "^2.6.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.391.0",
+    "@aws-sdk/lib-storage": "^3.391.0",
+    "dayjs": "^1.11.9",
+    "mathjs": "^11.9.1",
+    "ts-node": "^10.9.1"
+  }
+}

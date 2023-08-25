@@ -6,7 +6,10 @@ import commonjs from '@rollup/plugin-commonjs'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
+import replace from '@rollup/plugin-replace'
 
+const isProduction = process.env.NODE_ENV === 'production'
+console.log(isProduction)
 const pkg = 'foreverland'
 const extensions = ['.ts']
 export default {
@@ -41,6 +44,10 @@ export default {
   plugins: [
     commonjs(),
     json(),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      preventAssignment: true
+    }),
     typescript(),
     nodeResolve({ browser: true }),
     nodePolyfills(),

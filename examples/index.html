@@ -8,13 +8,82 @@
 </head>
 
 <body>
+  <div class="box">
+    <input type="file" id="file" />
+    <div id="percentage">0</div>
+    <button id="btn">Upload</button>
+    <button id="getSign">Get Sign</button>
+  </div>
   <script src="../dist/foreverland.umd.min.js"></script>
   <script>
-    const { Forever } = foreverland
-    const client = new Forever({
-      accessKeyId: '',
-      secretAccessKey: ''
+    function strToArrayBuffer(str) {
+      let array = new Int8Array(str.length);
+      for (let i = 0; i < str.length; i++) {
+        array[i] = str.charCodeAt(i);
+      }
+      return array.buffer;
+    }
+    let file = null
+    let percentage = 0
+    const fileRef = document.querySelector('#file')
+    const btnRef = document.querySelector('#btn')
+    const percentageRef = document.querySelector('#percentage')
+    const getSignRef = document.querySelector('#getSign')
+    fileRef.addEventListener('change', (e) => {
+      console.log(e.target.files[0])
+      file = e.target.files[0]
     })
+    btnRef.addEventListener('click', () => {
+      handleUpload()
+    })
+    getSignRef.addEventListener('click', () => {
+      getSign()
+    })
+
+
+
+
+    const { Forever } = foreverland
+    let client = new Forever()
+
+    // get signatureText -> metamask signature -> valid signature
+    async function getSign() {
+      const nonce = await client.getSignMessage('0x866925e79c447352711bF740183AA3Cc67371E16')
+      let byteBuffer = strToArrayBuffer(nonce)
+      let dataview = new DataView(byteBuffer, 0, byteBuffer.byteLength)
+      let res = ""
+      for (let i = 0; i < nonce.length; i++) {
+        let p = dataview.getInt8(i).toString(16)
+        if (p.length < 2) {
+          p = '0' + p
+        }
+        res += p
+      }
+      const msg = `0x${res}`;
+      const sign = await window.ethereum.request({
+        method: 'personal_sign',
+        params: [msg, '0x866925e79c447352711bF740183AA3Cc67371E16', ''],
+      })
+      await client.validSign('0x866925e79c447352711bF740183AA3Cc67371E16', sign)
+    }
+
+
+    const handleUpload = async () => {
+      try {
+        uploadObject = client.upload(
+          file,
+          file.type
+        )
+        uploadObject.progress((e) => {
+          percentage = (e.loaded / e.total) * 100
+          percentageRef.innerHTML = percentage
+        })
+        const data = await uploadObject.done()
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
   </script>
 </body>
 

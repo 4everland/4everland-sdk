@@ -1,3 +1,6 @@
 import { ErrorBase } from './error-base'
-type UploadErrorName = 'ACCESSDENIED' | 'RESOURCE_FULL' | 'RESOURCE_EXPIRED'
-export class UploadError extends ErrorBase<UploadErrorName> {}
+type BaseErrorName = 'Service Error'
+type AuthApiErrorName = BaseErrorName
+type BucketApiErrorName = BaseErrorName
+export class AuthApiError extends ErrorBase<AuthApiErrorName> {}
+export class BucketApiError extends ErrorBase<BucketApiErrorName> {}

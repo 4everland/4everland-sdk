@@ -1,4 +1,4 @@
-import { ValidSignResult } from '../core/type';
+import { ValidSignResult } from './type';
 declare class Forever {
     private auth;
     private bucket;
@@ -8,6 +8,6 @@ declare class Forever {
     validSign(address: string, signature: string): Promise<{
         expiration: number;
     }>;
-    upload(Body: File, ContentType?: string): import("../core/type").UploadResult;
+    upload(Body: File, ContentType?: string): import("./type").UploadResult;
 }
 export default Forever;

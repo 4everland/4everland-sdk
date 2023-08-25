@@ -1,2 +1,2 @@
-import Forever from './utils/help';
+import Forever from './core';
 export { Forever };

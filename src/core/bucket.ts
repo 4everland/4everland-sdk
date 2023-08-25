@@ -22,6 +22,7 @@ class BucketApi {
     this.credentials = credentials
     this.accessToken = accessToken
   }
+  uploadObject(params: PutObjectParams): UploadResult
   uploadObject(params: PutObjectParams): UploadResult {
     let task: Upload
     try {
@@ -30,7 +31,7 @@ class BucketApi {
         params
       })
     } catch (error: any) {
-      throw new Error('Params Error')
+      throw new BucketApiError('Params Error', 'Params Error')
     }
     return {
       abort: async () => {
@@ -46,6 +47,12 @@ class BucketApi {
           }
         } catch (error: any) {
           console.log(error)
+          if (error.message == 'Failed to fetch') {
+            throw new BucketApiError('NetWord Error', error.message)
+          }
+          if (error.name == 'AbortError') {
+            throw new BucketApiError('Abort Error', 'Upload aborted!')
+          }
           throw new BucketApiError('Service Error', 'Service Error')
         }
       },

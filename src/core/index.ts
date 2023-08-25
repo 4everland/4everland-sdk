@@ -2,6 +2,7 @@ import axios from 'axios'
 import AuthApi from './auth'
 import BucketApi from './bucket'
 import { ValidSignResult } from './type'
+import { BucketApiError } from '../utils/errors'
 axios.interceptors.response.use(
   (res) => {
     return res
@@ -48,7 +49,7 @@ class Forever {
   }
   upload(Body: File, ContentType?: string) {
     if (!this.validSignResult) {
-      throw new Error('you must execution validaSign function')
+      throw new BucketApiError('Operation Error', 'You must execution validaSign function')
     }
     return this.bucket!.uploadObject({
       Bucket: this.validSignResult.accessBucket,

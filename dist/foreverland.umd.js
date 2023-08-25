@@ -38603,8 +38603,14 @@ ${toHex(hashedRequest)}`;
                     _context2.prev = 11;
                     _context2.t0 = _context2["catch"](0);
                     console.log(_context2.t0);
+                    if (!(_context2.t0.name == 'AbortError')) {
+                      _context2.next = 16;
+                      break;
+                    }
+                    throw new BucketApiError('Abort Error', 'Upload aborted!');
+                  case 16:
                     throw new BucketApiError('Service Error', 'Service Error');
-                  case 15:
+                  case 17:
                   case "end":
                     return _context2.stop();
                 }

@@ -38713,11 +38713,6 @@ ${toHex(hashedRequest)}`;
     return BucketApi;
   }();
 
-  axios$1.interceptors.response.use(function (res) {
-    return res;
-  }, function (error) {
-    return Promise.reject(error.response);
-  });
   var Forever = /*#__PURE__*/function () {
     function Forever() {
       _classCallCheck(this, Forever);

@@ -1,16 +1,7 @@
-import axios from 'axios'
 import AuthApi from './auth'
 import BucketApi from './bucket'
 import { ValidSignResult } from './type'
 import { BucketApiError } from '../utils/errors'
-axios.interceptors.response.use(
-  (res) => {
-    return res
-  },
-  (error) => {
-    return Promise.reject(error.response)
-  }
-)
 
 class Forever {
   private auth: AuthApi

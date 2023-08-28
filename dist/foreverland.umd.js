@@ -5813,6 +5813,67 @@
   var pinningServiceApi = 'https://pinning.foreverland.xyz';
   var registerApi = 'https://sts-api.foreverland.xyz';
   var endpoint = 'https://s3gw.foreverland.xyz';
+  var Request$1 = /*#__PURE__*/function () {
+    function Request(config) {
+      _classCallCheck(this, Request);
+      this.instance = axios$1.create(config);
+      this.instance.interceptors.response.use(function (res) {
+        return res;
+      }, function (error) {
+        // do something
+        if (error.message) {
+          return Promise.reject(new Error(error.message));
+        }
+        return Promise.reject(new AuthApiError('Service Error', error.response));
+      });
+    }
+    _createClass(Request, [{
+      key: "request",
+      value: function request(config) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+          _this.instance.request(config).then(function (res) {
+            resolve(res.data);
+          })["catch"](reject);
+        });
+      }
+    }, {
+      key: "get",
+      value: function get(config) {
+        return this.request(Object.assign(Object.assign({}, config), {
+          method: 'GET'
+        }));
+      }
+    }, {
+      key: "post",
+      value: function post(config) {
+        return this.request(Object.assign(Object.assign({}, config), {
+          method: 'POST'
+        }));
+      }
+    }, {
+      key: "put",
+      value: function put(config) {
+        return this.request(Object.assign(Object.assign({}, config), {
+          method: 'PUT'
+        }));
+      }
+    }, {
+      key: "delete",
+      value: function _delete(config) {
+        return this.request(Object.assign(Object.assign({}, config), {
+          method: 'DELETE'
+        }));
+      }
+    }]);
+    return Request;
+  }();
+  var authRequest = new Request$1({
+    baseURL: registerApi
+  });
+  var pinningRequest = new Request$1({
+    baseURL: pinningServiceApi
+  });
 
   var AuthApi = /*#__PURE__*/function () {
     function AuthApi() {
@@ -5825,12 +5886,8 @@
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt("return", new Promise(function (resolve, reject) {
-                  axios$1.get("".concat(registerApi, "/auth/").concat(address)).then(function (res) {
-                    resolve(res.data);
-                  })["catch"](function (error) {
-                    reject(new AuthApiError('Service Error', error.data || error.message));
-                  });
+                return _context.abrupt("return", authRequest.get({
+                  url: "/auth/".concat(address)
                 }));
               case 1:
               case "end":
@@ -5846,15 +5903,11 @@
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
               case 0:
-                return _context2.abrupt("return", new Promise(function (resolve, reject) {
-                  axios$1.post("".concat(registerApi, "/auth/").concat(address), {
+                return _context2.abrupt("return", authRequest.post({
+                  url: "/auth/".concat(address),
+                  data: {
                     signature: signature
-                  }).then(function (res) {
-                    resolve(res.data);
-                  })["catch"](function (error) {
-                    console.log(error);
-                    reject(new AuthApiError('Service Error', error.data || error.message));
-                  });
+                  }
                 }));
               case 1:
               case "end":
@@ -38563,7 +38616,7 @@ ${toHex(hashedRequest)}`;
             params: params
           });
         } catch (error) {
-          throw new Error('Params Error');
+          throw new BucketApiError('Params Error', 'Params Error');
         }
         return {
           abort: function abort() {
@@ -38603,14 +38656,20 @@ ${toHex(hashedRequest)}`;
                     _context2.prev = 11;
                     _context2.t0 = _context2["catch"](0);
                     console.log(_context2.t0);
-                    if (!(_context2.t0.name == 'AbortError')) {
+                    if (!(_context2.t0.message == 'Failed to fetch')) {
                       _context2.next = 16;
                       break;
                     }
-                    throw new BucketApiError('Abort Error', 'Upload aborted!');
+                    throw new BucketApiError('NetWord Error', _context2.t0.message);
                   case 16:
+                    if (!(_context2.t0.name == 'AbortError')) {
+                      _context2.next = 18;
+                      break;
+                    }
+                    throw new BucketApiError('Abort Error', 'Upload aborted!');
+                  case 18:
                     throw new BucketApiError('Service Error', 'Service Error');
-                  case 17:
+                  case 19:
                   case "end":
                     return _context2.stop();
                 }
@@ -38633,10 +38692,7 @@ ${toHex(hashedRequest)}`;
           return _regeneratorRuntime().wrap(function _callee3$(_context3) {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.prev = 0;
-                _context3.next = 3;
-                return axios$1({
-                  method: 'POST',
+                return _context3.abrupt("return", pinningRequest.post({
                   url: pinningServiceApi + '/pins',
                   data: {
                     cid: cid,
@@ -38645,20 +38701,12 @@ ${toHex(hashedRequest)}`;
                   headers: {
                     Authorization: 'Bearer ' + accessToken
                   }
-                });
-              case 3:
-                _context3.next = 9;
-                break;
-              case 5:
-                _context3.prev = 5;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
-                throw new AuthApiError('Service Error', 'Service Error');
-              case 9:
+                }));
+              case 1:
               case "end":
                 return _context3.stop();
             }
-          }, _callee3, null, [[0, 5]]);
+          }, _callee3);
         }));
       }
     }]);
@@ -38719,7 +38767,7 @@ ${toHex(hashedRequest)}`;
       key: "upload",
       value: function upload(Body, ContentType) {
         if (!this.validSignResult) {
-          throw new Error('you must execution validaSign function');
+          throw new BucketApiError('Operation Error', 'You must execution validaSign function');
         }
         return this.bucket.uploadObject({
           Bucket: this.validSignResult.accessBucket,

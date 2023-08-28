@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
 import { Upload, Progress } from '@aws-sdk/lib-storage'
-import { pinningServiceApi, endpoint } from '../api/index'
-import { AuthApiError, BucketApiError } from '../utils/errors'
+import { pinningServiceApi, endpoint, pinningRequest } from '../api/index'
+import { BucketApiError } from '../utils/errors'
 import type { Credentials, PutObjectParams, UploadResult } from './type'
 
 class BucketApi {
@@ -22,7 +21,6 @@ class BucketApi {
     this.credentials = credentials
     this.accessToken = accessToken
   }
-  uploadObject(params: PutObjectParams): UploadResult
   uploadObject(params: PutObjectParams): UploadResult {
     let task: Upload
     try {
@@ -67,22 +65,16 @@ class BucketApi {
   }
 
   private async pinning(cid: string, name: string, accessToken: string) {
-    try {
-      await axios({
-        method: 'POST',
-        url: pinningServiceApi + '/pins',
-        data: {
-          cid,
-          name
-        },
-        headers: {
-          Authorization: 'Bearer ' + accessToken
-        }
-      })
-    } catch (error) {
-      console.log(error)
-      throw new AuthApiError('Service Error', 'Service Error')
-    }
+    return pinningRequest.post({
+      url: pinningServiceApi + '/pins',
+      data: {
+        cid,
+        name
+      },
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
+    })
   }
 }
 export default BucketApi

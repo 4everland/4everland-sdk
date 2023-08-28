@@ -26,6 +26,7 @@
     }
     let file = null
     let percentage = 0
+    let expireTime = 0
     const fileRef = document.querySelector('#file')
     const btnRef = document.querySelector('#btn')
     const percentageRef = document.querySelector('#percentage')
@@ -50,37 +51,48 @@
     // get signatureText -> metamask signature -> valid signature
     async function getSign() {
 
-      const accounts = await window.ethereum
-        .request({ method: 'eth_requestAccounts' })
-        .catch((err) => {
-          if (err.code === 4001) {
-            console.log('Please connect to MetaMask.')
-          } else {
-            console.error(err)
+      try {
+        const accounts = await window.ethereum
+          .request({ method: 'eth_requestAccounts' })
+          .catch((err) => {
+            if (err.code === 4001) {
+              console.log('Please connect to MetaMask.')
+            } else {
+              console.error(err)
+            }
+          })
+        const nonce = await client.getSignMessage(accounts[0])
+        let byteBuffer = strToArrayBuffer(nonce)
+        let dataview = new DataView(byteBuffer, 0, byteBuffer.byteLength)
+        let res = ""
+        for (let i = 0; i < nonce.length; i++) {
+          let p = dataview.getInt8(i).toString(16)
+          if (p.length < 2) {
+            p = '0' + p
           }
-        })
-      const nonce = await client.getSignMessage(accounts[0])
-      let byteBuffer = strToArrayBuffer(nonce)
-      let dataview = new DataView(byteBuffer, 0, byteBuffer.byteLength)
-      let res = ""
-      for (let i = 0; i < nonce.length; i++) {
-        let p = dataview.getInt8(i).toString(16)
-        if (p.length < 2) {
-          p = '0' + p
+          res += p
         }
-        res += p
+        const msg = `0x${res}`;
+        const sign = await window.ethereum.request({
+          method: 'personal_sign',
+          params: [msg, accounts[0], ''],
+        })
+        const { expiration } = await client.validSign(accounts[0], sign)
+        console.log(expiration)
+        expireTime = expiration * 1e3
+      } catch (error) {
+        console.log(error)
       }
-      const msg = `0x${res}`;
-      const sign = await window.ethereum.request({
-        method: 'personal_sign',
-        params: [msg, accounts[0], ''],
-      })
-      await client.validSign(accounts[0], sign)
     }
 
 
     const handleUpload = async () => {
+
+
       try {
+        if (expireTime <= +new Date()) {
+          await getSign()
+        }
         uploadObject = client.upload(
           file,
           file.type

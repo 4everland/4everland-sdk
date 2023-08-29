@@ -1,17 +1,19 @@
-import AuthApi from './auth'
-import BucketApi from './bucket'
-import { ValidSignResult } from './type'
+import AuthService from './auth'
+import BucketService from './bucket'
+import { ValidSignResult, Gateways } from './type'
 import { BucketApiError } from '../utils/errors'
 import { StreamingBlobPayloadInputTypes } from '@smithy/types'
-
+import PinningService from './pinning'
 class Forever {
-  private auth: AuthApi
-  private bucket: BucketApi | null
-  validSignResult: ValidSignResult | null
-  constructor() {
-    this.auth = new AuthApi()
-    this.bucket = null
-    this.validSignResult = null
+  auth: AuthService
+  bucket?: BucketService
+  validSignResult?: ValidSignResult
+  gateways: Gateways
+  pinningService: PinningService
+  constructor(gateways: Gateways) {
+    this.gateways = gateways
+    this.auth = new AuthService(this.gateways.authServiceUrl)
+    this.pinningService = new PinningService(this.gateways.pinningServiceUrl)
   }
 
   getSignMessage(address: string) {
@@ -24,13 +26,14 @@ class Forever {
         .then((res) => {
           this.validSignResult = res
           const { accessKeyId, secretAccessKey, sessionToken, token } = this.validSignResult
-          this.bucket = new BucketApi(
+          this.bucket = new BucketService(
             {
               accessKeyId,
               secretAccessKey,
               sessionToken
             },
-            token
+            token,
+            this.gateways.endpoint
           )
           resolve({
             expiration: this.validSignResult.expiration
@@ -51,6 +54,12 @@ class Forever {
       Body: body,
       ContentType: contentType
     })
+  }
+  pinning(cid: string, name: string) {
+    if (!this.validSignResult) {
+      throw new Error('execution error')
+    }
+    return this.pinningService.pinning(cid, name, this.validSignResult!.token)
   }
 }
 

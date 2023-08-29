@@ -26,3 +26,9 @@ export interface UploadResult {
   done: () => Promise<{ cid: string | undefined }>
   progress: (cb?: (e: Progress) => void) => void
 }
+
+export interface Gateways {
+  pinningServiceUrl: string
+  authServiceUrl: string
+  endpoint: string
+}

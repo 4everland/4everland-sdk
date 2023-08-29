@@ -1,18 +1,17 @@
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
 import { Upload, Progress } from '@aws-sdk/lib-storage'
-import { pinningServiceApi, endpoint, pinningRequest } from '../api/index'
+// import { endpoint } from '../api/index'
 import { BucketApiError } from '../utils/errors'
 import type { Credentials, PutObjectParams, UploadResult } from './type'
-class BucketApi {
+class BucketService {
   private instance: S3
   accessToken: string
   credentials: Credentials
-  endpoint = endpoint
   forcePathStyle = false
   region = 'eu-west-2'
-  constructor(credentials: Credentials, accessToken: string) {
+  constructor(credentials: Credentials, accessToken: string, endpoint?: string) {
     this.instance = new S3({
-      endpoint: this.endpoint,
+      endpoint: endpoint,
       credentials,
       forcePathStyle: this.forcePathStyle,
       region: this.region
@@ -38,7 +37,6 @@ class BucketApi {
         try {
           const { ETag } = (await task.done()) as CompleteMultipartUploadCommandOutput
           const cid = JSON.parse(ETag!)
-          await this.pinning(cid, cid, this.accessToken)
           return {
             cid
           }
@@ -62,18 +60,5 @@ class BucketApi {
       }
     }
   }
-
-  private async pinning(cid: string, name: string, accessToken: string) {
-    return pinningRequest.post({
-      url: pinningServiceApi + '/pins',
-      data: {
-        cid,
-        name
-      },
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
-    })
-  }
 }
-export default BucketApi
+export default BucketService

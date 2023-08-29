@@ -12,10 +12,6 @@
     "build:dev": "NODE_ENV=development rollup -c --bundleConfigAsCjs",
     "build": "NODE_ENV=production rollup -c --bundleConfigAsCjs"
   },
-  "files": [
-    "dist",
-    "src"
-  ],
   "keywords": ["4everland", "S3", "upload", "ipfs"],
   "author": "",
   "license": "ISC",

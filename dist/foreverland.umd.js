@@ -5810,9 +5810,12 @@
     return _createClass(BucketApiError);
   }(ErrorBase);
 
-  var pinningServiceApi = 'https://pinning.foreverland.xyz';
-  var registerApi = 'https://sts-api.foreverland.xyz';
-  var endpoint = 'https://s3gw.foreverland.xyz';
+  // const isProd = "development" === 'production'
+  // export const pinningServiceApi = isProd
+  //   ? 'https://api.4everland.dev'
+  //   : 'https://pinning.foreverland.xyz'
+  // export const registerApi = isProd ? 'https://b.foreverland.xyz' : 'https://sts-api.foreverland.xyz'
+  // export const endpoint = isProd ? 'https://endpoint.4everland.co' : 'https://s3gw.foreverland.xyz'
   var Request$1 = /*#__PURE__*/function () {
     function Request(config) {
       _classCallCheck(this, Request);
@@ -5867,33 +5870,31 @@
       }
     }]);
     return Request;
-  }();
-  var authRequest = new Request$1({
-    baseURL: registerApi
-  });
-  var pinningRequest = new Request$1({
-    baseURL: pinningServiceApi
-  });
+  }(); // const authRequest = new Request({
 
-  var AuthApi = /*#__PURE__*/function () {
-    function AuthApi() {
-      _classCallCheck(this, AuthApi);
+  var AuthService = /*#__PURE__*/function () {
+    function AuthService(baseUrl) {
+      _classCallCheck(this, AuthService);
+      this.baseUrl = baseUrl;
+      this.request = new Request$1({
+        baseURL: baseUrl
+      });
     }
-    _createClass(AuthApi, [{
+    _createClass(AuthService, [{
       key: "getSignMessage",
       value: function getSignMessage(address) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt("return", authRequest.get({
+                return _context.abrupt("return", this.request.get({
                   url: "/auth/".concat(address)
                 }));
               case 1:
               case "end":
                 return _context.stop();
             }
-          }, _callee);
+          }, _callee, this);
         }));
       }
     }, {
@@ -5903,7 +5904,7 @@
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
               case 0:
-                return _context2.abrupt("return", authRequest.post({
+                return _context2.abrupt("return", this.request.post({
                   url: "/auth/".concat(address),
                   data: {
                     signature: signature
@@ -5913,11 +5914,11 @@
               case "end":
                 return _context2.stop();
             }
-          }, _callee2);
+          }, _callee2, this);
         }));
       }
     }]);
-    return AuthApi;
+    return AuthService;
   }();
 
   var HttpAuthLocation;
@@ -38590,14 +38591,13 @@ ${toHex(hashedRequest)}`;
     }
   }
 
-  var BucketApi = /*#__PURE__*/function () {
-    function BucketApi(credentials, accessToken) {
-      _classCallCheck(this, BucketApi);
-      this.endpoint = endpoint;
+  var BucketService = /*#__PURE__*/function () {
+    function BucketService(credentials, accessToken, endpoint) {
+      _classCallCheck(this, BucketService);
       this.forcePathStyle = false;
       this.region = 'eu-west-2';
       this.instance = new S3({
-        endpoint: this.endpoint,
+        endpoint: endpoint,
         credentials: credentials,
         forcePathStyle: this.forcePathStyle,
         region: this.region
@@ -38605,7 +38605,7 @@ ${toHex(hashedRequest)}`;
       this.credentials = credentials;
       this.accessToken = accessToken;
     }
-    _createClass(BucketApi, [{
+    _createClass(BucketService, [{
       key: "uploadObject",
       value: function uploadObject(params) {
         var _this = this;
@@ -38646,34 +38646,31 @@ ${toHex(hashedRequest)}`;
                     _yield$task$done = _context2.sent;
                     ETag = _yield$task$done.ETag;
                     cid = JSON.parse(ETag);
-                    _context2.next = 8;
-                    return this.pinning(cid, cid, this.accessToken);
-                  case 8:
                     return _context2.abrupt("return", {
                       cid: cid
                     });
-                  case 11:
-                    _context2.prev = 11;
+                  case 9:
+                    _context2.prev = 9;
                     _context2.t0 = _context2["catch"](0);
                     console.log(_context2.t0);
                     if (!(_context2.t0.message == 'Failed to fetch')) {
-                      _context2.next = 16;
+                      _context2.next = 14;
                       break;
                     }
                     throw new BucketApiError('NetWord Error', _context2.t0.message);
-                  case 16:
+                  case 14:
                     if (!(_context2.t0.name == 'AbortError')) {
-                      _context2.next = 18;
+                      _context2.next = 16;
                       break;
                     }
                     throw new BucketApiError('Abort Error', 'Upload aborted!');
-                  case 18:
+                  case 16:
                     throw new BucketApiError('Service Error', 'Service Error');
-                  case 19:
+                  case 17:
                   case "end":
                     return _context2.stop();
                 }
-              }, _callee2, this, [[0, 11]]);
+              }, _callee2, null, [[0, 9]]);
             }));
           },
           progress: function progress(cb) {
@@ -38685,15 +38682,27 @@ ${toHex(hashedRequest)}`;
           }
         };
       }
-    }, {
+    }]);
+    return BucketService;
+  }();
+
+  var PinningService = /*#__PURE__*/function () {
+    function PinningService(baseUrl) {
+      _classCallCheck(this, PinningService);
+      this.baseUrl = baseUrl;
+      this.request = new Request$1({
+        baseURL: baseUrl
+      });
+    }
+    _createClass(PinningService, [{
       key: "pinning",
       value: function pinning(cid, name, accessToken) {
-        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) switch (_context.prev = _context.next) {
               case 0:
-                return _context3.abrupt("return", pinningRequest.post({
-                  url: pinningServiceApi + '/pins',
+                return _context.abrupt("return", this.request.post({
+                  url: '/pins',
                   data: {
                     cid: cid,
                     name: name
@@ -38704,21 +38713,21 @@ ${toHex(hashedRequest)}`;
                 }));
               case 1:
               case "end":
-                return _context3.stop();
+                return _context.stop();
             }
-          }, _callee3);
+          }, _callee, this);
         }));
       }
     }]);
-    return BucketApi;
+    return PinningService;
   }();
 
   var Forever = /*#__PURE__*/function () {
-    function Forever() {
+    function Forever(gateways) {
       _classCallCheck(this, Forever);
-      this.auth = new AuthApi();
-      this.bucket = null;
-      this.validSignResult = null;
+      this.gateways = gateways;
+      this.auth = new AuthService(this.gateways.authServiceUrl);
+      this.pinningService = new PinningService(this.gateways.pinningServiceUrl);
     }
     _createClass(Forever, [{
       key: "getSignMessage",
@@ -38741,11 +38750,11 @@ ${toHex(hashedRequest)}`;
                       secretAccessKey = _this$validSignResult.secretAccessKey,
                       sessionToken = _this$validSignResult.sessionToken,
                       token = _this$validSignResult.token;
-                    _this.bucket = new BucketApi({
+                    _this.bucket = new BucketService({
                       accessKeyId: accessKeyId,
                       secretAccessKey: secretAccessKey,
                       sessionToken: sessionToken
-                    }, token);
+                    }, token, _this.gateways.endpoint);
                     resolve({
                       expiration: _this.validSignResult.expiration
                     });
@@ -38771,10 +38780,21 @@ ${toHex(hashedRequest)}`;
           ContentType: contentType
         });
       }
+    }, {
+      key: "pinning",
+      value: function pinning(cid, name) {
+        if (!this.validSignResult) {
+          throw new Error('execution error');
+        }
+        return this.pinningService.pinning(cid, name, this.validSignResult.token);
+      }
     }]);
     return Forever;
   }();
 
+  exports.AuthService = AuthService;
+  exports.BucketService = BucketService;
   exports.Forever = Forever;
+  exports.PinningService = PinningService;
 
 }));

@@ -1,13 +1,11 @@
 import type { Credentials, PutObjectParams, UploadResult } from './type';
-declare class BucketApi {
+declare class BucketService {
     private instance;
     accessToken: string;
     credentials: Credentials;
-    endpoint: string;
     forcePathStyle: boolean;
     region: string;
-    constructor(credentials: Credentials, accessToken: string);
+    constructor(credentials: Credentials, accessToken: string, endpoint?: string);
     uploadObject(params: PutObjectParams): UploadResult;
-    private pinning;
 }
-export default BucketApi;
+export default BucketService;

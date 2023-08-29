@@ -16,7 +16,7 @@
     "dist",
     "src"
   ],
-  "keywords": [],
+  "keywords": ["4everland", "S3", "upload", "ipfs"],
   "author": "",
   "license": "ISC",
   "devDependencies": {

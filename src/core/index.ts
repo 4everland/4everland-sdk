@@ -2,6 +2,7 @@ import AuthApi from './auth'
 import BucketApi from './bucket'
 import { ValidSignResult } from './type'
 import { BucketApiError } from '../utils/errors'
+import { StreamingBlobPayloadInputTypes } from '@smithy/types'
 
 class Forever {
   private auth: AuthApi
@@ -38,17 +39,17 @@ class Forever {
         .catch(reject)
     })
   }
-  upload(Body: File, ContentType?: string) {
+  upload(body: StreamingBlobPayloadInputTypes, fileName: string, contentType?: string) {
     if (!this.validSignResult) {
       throw new BucketApiError('Operation Error', 'You must execution validaSign function')
     }
     return this.bucket!.uploadObject({
       Bucket: this.validSignResult.accessBucket,
       Key: this.validSignResult.folderPath
-        ? this.validSignResult.folderPath + '/' + Body.name
-        : Body.name,
-      Body: Body,
-      ContentType: ContentType ? ContentType : Body.type
+        ? this.validSignResult.folderPath + '/' + fileName
+        : fileName,
+      Body: body,
+      ContentType: contentType
     })
   }
 }

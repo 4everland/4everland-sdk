@@ -3,7 +3,6 @@ import { Upload, Progress } from '@aws-sdk/lib-storage'
 import { pinningServiceApi, endpoint, pinningRequest } from '../api/index'
 import { BucketApiError } from '../utils/errors'
 import type { Credentials, PutObjectParams, UploadResult } from './type'
-
 class BucketApi {
   private instance: S3
   accessToken: string

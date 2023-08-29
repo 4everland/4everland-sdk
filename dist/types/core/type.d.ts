@@ -1,4 +1,5 @@
 import { Progress } from '@aws-sdk/lib-storage';
+import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 export interface ValidSignResult extends Credentials {
     expiration: number;
     accessBucket: string;
@@ -13,7 +14,7 @@ export interface Credentials {
 export interface PutObjectParams {
     Bucket: string;
     Key: string;
-    Body: File;
+    Body: StreamingBlobPayloadInputTypes;
     ContentType?: string;
 }
 export interface UploadResult {

@@ -38760,15 +38760,15 @@ ${toHex(hashedRequest)}`;
       }
     }, {
       key: "upload",
-      value: function upload(Body, ContentType) {
+      value: function upload(body, fileName, contentType) {
         if (!this.validSignResult) {
           throw new BucketApiError('Operation Error', 'You must execution validaSign function');
         }
         return this.bucket.uploadObject({
           Bucket: this.validSignResult.accessBucket,
-          Key: this.validSignResult.folderPath ? this.validSignResult.folderPath + '/' + Body.name : Body.name,
-          Body: Body,
-          ContentType: ContentType ? ContentType : Body.type
+          Key: this.validSignResult.folderPath ? this.validSignResult.folderPath + '/' + fileName : fileName,
+          Body: body,
+          ContentType: contentType
         });
       }
     }]);

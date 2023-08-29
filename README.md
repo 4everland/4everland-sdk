@@ -4,9 +4,9 @@
 
 ```shell
 
-npm i test-module -D
+npm i 4everland-sdk -D
 or
-yarn add test-module -D
+yarn add 4everland-sdk -D
 
 ```
 

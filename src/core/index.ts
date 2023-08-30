@@ -25,14 +25,13 @@ class Forever {
         .validSign<ValidSignResult>(address, signature)
         .then((res) => {
           this.validSignResult = res
-          const { accessKeyId, secretAccessKey, sessionToken, token } = this.validSignResult
+          const { accessKeyId, secretAccessKey, sessionToken } = this.validSignResult
           this.bucket = new BucketService(
             {
               accessKeyId,
               secretAccessKey,
               sessionToken
             },
-            token,
             this.gateways.endpoint
           )
           resolve({

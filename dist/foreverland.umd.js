@@ -38592,7 +38592,7 @@ ${toHex(hashedRequest)}`;
   }
 
   var BucketService = /*#__PURE__*/function () {
-    function BucketService(credentials, accessToken, endpoint) {
+    function BucketService(credentials, endpoint) {
       _classCallCheck(this, BucketService);
       this.forcePathStyle = false;
       this.region = 'eu-west-2';
@@ -38603,7 +38603,6 @@ ${toHex(hashedRequest)}`;
         region: this.region
       });
       this.credentials = credentials;
-      this.accessToken = accessToken;
     }
     _createClass(BucketService, [{
       key: "uploadObject",
@@ -38748,13 +38747,12 @@ ${toHex(hashedRequest)}`;
                     var _this$validSignResult = _this.validSignResult,
                       accessKeyId = _this$validSignResult.accessKeyId,
                       secretAccessKey = _this$validSignResult.secretAccessKey,
-                      sessionToken = _this$validSignResult.sessionToken,
-                      token = _this$validSignResult.token;
+                      sessionToken = _this$validSignResult.sessionToken;
                     _this.bucket = new BucketService({
                       accessKeyId: accessKeyId,
                       secretAccessKey: secretAccessKey,
                       sessionToken: sessionToken
-                    }, token, _this.gateways.endpoint);
+                    }, _this.gateways.endpoint);
                     resolve({
                       expiration: _this.validSignResult.expiration
                     });

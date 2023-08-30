@@ -5,11 +5,10 @@ import { BucketApiError } from '../utils/errors'
 import type { Credentials, PutObjectParams, UploadResult } from './type'
 class BucketService {
   private instance: S3
-  accessToken: string
   credentials: Credentials
   forcePathStyle = false
   region = 'eu-west-2'
-  constructor(credentials: Credentials, accessToken: string, endpoint?: string) {
+  constructor(credentials: Credentials, endpoint?: string) {
     this.instance = new S3({
       endpoint: endpoint,
       credentials,
@@ -17,7 +16,6 @@ class BucketService {
       region: this.region
     })
     this.credentials = credentials
-    this.accessToken = accessToken
   }
   uploadObject(params: PutObjectParams): UploadResult {
     let task: Upload

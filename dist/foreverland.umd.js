@@ -5810,12 +5810,6 @@
     return _createClass(BucketApiError);
   }(ErrorBase);
 
-  // const isProd = "development" === 'production'
-  // export const pinningServiceApi = isProd
-  //   ? 'https://api.4everland.dev'
-  //   : 'https://pinning.foreverland.xyz'
-  // export const registerApi = isProd ? 'https://b.foreverland.xyz' : 'https://sts-api.foreverland.xyz'
-  // export const endpoint = isProd ? 'https://endpoint.4everland.co' : 'https://s3gw.foreverland.xyz'
   var Request$1 = /*#__PURE__*/function () {
     function Request(config) {
       _classCallCheck(this, Request);
@@ -5870,7 +5864,7 @@
       }
     }]);
     return Request;
-  }(); // const authRequest = new Request({
+  }();
 
   var AuthService = /*#__PURE__*/function () {
     function AuthService(baseUrl) {
@@ -38722,11 +38716,11 @@ ${toHex(hashedRequest)}`;
   }();
 
   var Forever = /*#__PURE__*/function () {
-    function Forever(gateways) {
+    function Forever(config) {
       _classCallCheck(this, Forever);
-      this.gateways = gateways;
-      this.auth = new AuthService(this.gateways.authServiceUrl);
-      this.pinningService = new PinningService(this.gateways.pinningServiceUrl);
+      this.config = config;
+      this.auth = new AuthService(this.config.authServiceUrl);
+      this.pinningService = new PinningService(this.config.pinningServiceUrl);
     }
     _createClass(Forever, [{
       key: "getSignMessage",
@@ -38752,7 +38746,7 @@ ${toHex(hashedRequest)}`;
                       accessKeyId: accessKeyId,
                       secretAccessKey: secretAccessKey,
                       sessionToken: sessionToken
-                    }, _this.gateways.endpoint);
+                    }, _this.config.endpoint);
                     resolve({
                       expiration: _this.validSignResult.expiration
                     });
@@ -38767,16 +38761,14 @@ ${toHex(hashedRequest)}`;
       }
     }, {
       key: "upload",
-      value: function upload(body, fileName, contentType) {
+      value: function upload(params) {
         if (!this.validSignResult) {
           throw new BucketApiError('Operation Error', 'You must execution validaSign function');
         }
-        return this.bucket.uploadObject({
+        return this.bucket.uploadObject(Object.assign(Object.assign({}, params), {
           Bucket: this.validSignResult.accessBucket,
-          Key: this.validSignResult.folderPath ? this.validSignResult.folderPath + '/' + fileName : fileName,
-          Body: body,
-          ContentType: contentType
-        });
+          Key: this.validSignResult.folderPath ? this.validSignResult.folderPath + '/' + params.Key : params.Key
+        }));
       }
     }, {
       key: "pinning",

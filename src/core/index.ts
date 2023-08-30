@@ -1,19 +1,18 @@
 import AuthService from './auth'
 import BucketService from './bucket'
-import { ValidSignResult, Gateways } from './type'
+import { ValidSignResult, ForeverConfig, ForeverUploadParams } from './type'
 import { BucketApiError } from '../utils/errors'
-import { StreamingBlobPayloadInputTypes } from '@smithy/types'
 import PinningService from './pinning'
 class Forever {
   auth: AuthService
   bucket?: BucketService
   validSignResult?: ValidSignResult
-  gateways: Gateways
+  config: ForeverConfig
   pinningService: PinningService
-  constructor(gateways: Gateways) {
-    this.gateways = gateways
-    this.auth = new AuthService(this.gateways.authServiceUrl)
-    this.pinningService = new PinningService(this.gateways.pinningServiceUrl)
+  constructor(config: ForeverConfig) {
+    this.config = config
+    this.auth = new AuthService(this.config.authServiceUrl)
+    this.pinningService = new PinningService(this.config.pinningServiceUrl)
   }
 
   getSignMessage(address: string) {
@@ -32,7 +31,7 @@ class Forever {
               secretAccessKey,
               sessionToken
             },
-            this.gateways.endpoint
+            this.config.endpoint
           )
           resolve({
             expiration: this.validSignResult.expiration
@@ -41,17 +40,16 @@ class Forever {
         .catch(reject)
     })
   }
-  upload(body: StreamingBlobPayloadInputTypes, fileName: string, contentType?: string) {
+  upload(params: ForeverUploadParams) {
     if (!this.validSignResult) {
       throw new BucketApiError('Operation Error', 'You must execution validaSign function')
     }
     return this.bucket!.uploadObject({
+      ...params,
       Bucket: this.validSignResult.accessBucket,
       Key: this.validSignResult.folderPath
-        ? this.validSignResult.folderPath + '/' + fileName
-        : fileName,
-      Body: body,
-      ContentType: contentType
+        ? this.validSignResult.folderPath + '/' + params.Key
+        : params.Key
     })
   }
   pinning(cid: string, name: string) {

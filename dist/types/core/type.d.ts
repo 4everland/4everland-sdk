@@ -11,21 +11,24 @@ export interface Credentials {
     secretAccessKey: string;
     sessionToken: string;
 }
-export interface PutObjectParams {
-    Bucket: string;
+export interface ForeverUploadParams {
     Key: string;
     Body: StreamingBlobPayloadInputTypes;
     ContentType?: string;
 }
+export interface PutObjectParams extends ForeverUploadParams {
+    Bucket: string;
+}
 export interface UploadResult {
     abort: () => Promise<void>;
     done: () => Promise<{
-        cid: string | undefined;
+        cid: string;
     }>;
     progress: (cb?: (e: Progress) => void) => void;
 }
-export interface Gateways {
+export interface ForeverConfig {
     pinningServiceUrl: string;
     authServiceUrl: string;
     endpoint: string;
+    storageType: 'IPFS' | 'AR';
 }

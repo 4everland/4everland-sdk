@@ -1,6 +1,6 @@
 {
   "name": "4everland-pinning",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "./dist/foreverland.cjs.js",
   "module": "./dist/foreverland.esm.js",
@@ -12,14 +12,19 @@
     "build:dev": "NODE_ENV=development rollup -c --bundleConfigAsCjs",
     "build": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
     "major": "npm version major -m 'build: update major'",
-    "minor": "npm version minor -m 'build: update minor'", 
-    "patch": "npm version patch -m 'build: update patch'", 
-    "pub": "npm run build && npm publish --access=public", 
-    "pub:major": "npm run major && npm publish --access=public", 
-    "pub:minor": "npm run minor && npm publish --access=public", 
-    "pub:patch": "npm run patch && npm publish --access=public" 
+    "minor": "npm version minor -m 'build: update minor'",
+    "patch": "npm version patch -m 'build: update patch'",
+    "pub": "npm run build && npm publish --access=public",
+    "pub:major": "npm run major && npm publish --access=public",
+    "pub:minor": "npm run minor && npm publish --access=public",
+    "pub:patch": "npm run patch && npm publish --access=public"
   },
-  "keywords": ["4everland", "S3", "upload", "ipfs"],
+  "keywords": [
+    "4everland",
+    "S3",
+    "upload",
+    "ipfs"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {

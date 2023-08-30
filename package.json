@@ -10,14 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "rollup -c --w --bundleConfigAsCjs",
     "build:dev": "NODE_ENV=development rollup -c --bundleConfigAsCjs",
-    "build": "NODE_ENV=production rollup -c --bundleConfigAsCjs",
-    "major": "npm version major -m 'build: update major'",
-    "minor": "npm version minor -m 'build: update minor'",
-    "patch": "npm version patch -m 'build: update patch'",
-    "pub": "npm run build && npm publish --access=public",
-    "pub:major": "npm run major && npm publish --access=public",
-    "pub:minor": "npm run minor && npm publish --access=public",
-    "pub:patch": "npm run patch && npm publish --access=public"
+    "build": "NODE_ENV=production rollup -c --bundleConfigAsCjs"
   },
   "keywords": [
     "4everland",

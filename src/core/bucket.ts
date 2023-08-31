@@ -1,7 +1,5 @@
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
 import { Upload, Progress } from '@aws-sdk/lib-storage'
-// import { endpoint } from '../api/index'
-import { BucketApiError } from '../utils/errors'
 import type { Credentials, PutObjectParams, UploadResult } from './type'
 class BucketService {
   private instance: S3
@@ -25,7 +23,7 @@ class BucketService {
         params
       })
     } catch (error: any) {
-      throw new BucketApiError('Params Error', 'Params Error')
+      throw new Error('Params Error')
     }
     return {
       abort: async () => {
@@ -41,12 +39,12 @@ class BucketService {
         } catch (error: any) {
           console.log(error)
           if (error.message == 'Failed to fetch') {
-            throw new BucketApiError('NetWord Error', error.message)
+            throw new Error(error.message)
           }
           if (error.name == 'AbortError') {
-            throw new BucketApiError('Abort Error', 'Upload aborted!')
+            throw new Error('Upload aborted!')
           }
-          throw new BucketApiError('Service Error', 'Service Error')
+          throw new Error('Service Error')
         }
       },
       progress: (cb?: (e: Progress) => void) => {

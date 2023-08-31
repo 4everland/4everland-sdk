@@ -14,6 +14,6 @@ declare class Forever {
         expiration: number;
     }>;
     upload(params: ForeverUploadParams): import("./type").UploadResult;
-    pinning(cid: string, name: string): Promise<void>;
+    pinning(cid: string): Promise<void>;
 }
 export default Forever;

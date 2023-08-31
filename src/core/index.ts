@@ -1,7 +1,6 @@
 import AuthService from './auth'
 import BucketService from './bucket'
 import { ValidSignResult, ForeverConfig, ForeverUploadParams } from './type'
-import { BucketApiError } from '../utils/errors'
 import PinningService from './pinning'
 class Forever {
   auth: AuthService
@@ -42,7 +41,7 @@ class Forever {
   }
   upload(params: ForeverUploadParams) {
     if (!this.validSignResult) {
-      throw new BucketApiError('Operation Error', 'You must execution validaSign function')
+      throw new Error('execution error')
     }
     return this.bucket!.uploadObject({
       ...params,
@@ -52,11 +51,11 @@ class Forever {
         : params.Key
     })
   }
-  pinning(cid: string, name: string) {
+  pinning(cid: string) {
     if (!this.validSignResult) {
       throw new Error('execution error')
     }
-    return this.pinningService.pinning(cid, name, this.validSignResult!.token)
+    return this.pinningService.pinning(cid, '4EVERLAND', this.validSignResult!.token)
   }
 }
 

@@ -5800,15 +5800,6 @@
     }
     return _createClass(AuthApiError);
   }(ErrorBase);
-  var BucketApiError = /*#__PURE__*/function (_ErrorBase2) {
-    _inherits(BucketApiError, _ErrorBase2);
-    var _super2 = _createSuper(BucketApiError);
-    function BucketApiError() {
-      _classCallCheck(this, BucketApiError);
-      return _super2.apply(this, arguments);
-    }
-    return _createClass(BucketApiError);
-  }(ErrorBase);
 
   var Request$1 = /*#__PURE__*/function () {
     function Request(config) {
@@ -38609,7 +38600,7 @@ ${toHex(hashedRequest)}`;
             params: params
           });
         } catch (error) {
-          throw new BucketApiError('Params Error', 'Params Error');
+          throw new Error('Params Error');
         }
         return {
           abort: function abort() {
@@ -38650,15 +38641,15 @@ ${toHex(hashedRequest)}`;
                       _context2.next = 14;
                       break;
                     }
-                    throw new BucketApiError('NetWord Error', _context2.t0.message);
+                    throw new Error(_context2.t0.message);
                   case 14:
                     if (!(_context2.t0.name == 'AbortError')) {
                       _context2.next = 16;
                       break;
                     }
-                    throw new BucketApiError('Abort Error', 'Upload aborted!');
+                    throw new Error('Upload aborted!');
                   case 16:
-                    throw new BucketApiError('Service Error', 'Service Error');
+                    throw new Error('Service Error');
                   case 17:
                   case "end":
                     return _context2.stop();
@@ -38763,7 +38754,7 @@ ${toHex(hashedRequest)}`;
       key: "upload",
       value: function upload(params) {
         if (!this.validSignResult) {
-          throw new BucketApiError('Operation Error', 'You must execution validaSign function');
+          throw new Error('execution error');
         }
         return this.bucket.uploadObject(Object.assign(Object.assign({}, params), {
           Bucket: this.validSignResult.accessBucket,
@@ -38772,11 +38763,11 @@ ${toHex(hashedRequest)}`;
       }
     }, {
       key: "pinning",
-      value: function pinning(cid, name) {
+      value: function pinning(cid) {
         if (!this.validSignResult) {
           throw new Error('execution error');
         }
-        return this.pinningService.pinning(cid, name, this.validSignResult.token);
+        return this.pinningService.pinning(cid, '4EVERLAND', this.validSignResult.token);
       }
     }]);
     return Forever;

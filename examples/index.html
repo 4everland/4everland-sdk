@@ -46,7 +46,12 @@
 
 
     const { Forever } = foreverland
-    let client = new Forever()
+    let client = new Forever({
+      authServiceUrl: 'https://sts-api.foreverland.xyz',
+      pinningServiceUrl: 'https://pinning.foreverland.xyz',
+      endpoint: 'https://s3gw.foreverland.xyz',
+      storageType: 'IPFS'
+    })
 
     // get signatureText -> metamask signature -> valid signature
     async function getSign() {
@@ -94,15 +99,19 @@
           await getSign()
         }
         uploadObject = client.upload(
-          file,
-          file.type
+          {
+            Key: file.name,
+            Body: file,
+            ContentType: file.type
+          }
         )
         uploadObject.progress((e) => {
           percentage = (e.loaded / e.total) * 100
           percentageRef.innerHTML = percentage
         })
-        const data = await uploadObject.done()
-        console.log(data)
+        const { cid } = await uploadObject.done()
+        console.log(cid)
+        await client.pinning(cid)
       } catch (error) {
         console.log(error)
       }

@@ -8,8 +8,8 @@ import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import replace from '@rollup/plugin-replace'
 
-// const isProduction = process.env.NODE_ENV === 'production'
-// console.log(isProduction)
+const isProduction = process.env.NODE_ENV === 'production'
+console.log(isProduction)
 const pkg = 'foreverland'
 const extensions = ['.ts']
 export default {
@@ -34,11 +34,7 @@ export default {
       file: `./dist/${pkg}.umd.min.js`,
       format: 'umd',
       name: pkg,
-      plugins: [terser()],
-      globals: {
-        S3: 'S3',
-        Upload: 'Upload'
-      }
+      plugins: [terser()]
     }
   ],
   plugins: [

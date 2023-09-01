@@ -4,16 +4,44 @@
 
 ```shell
 
-npm i 4everland-sdk -D
-or
-yarn add 4everland-sdk -D
+npm i 4everland-sdk
+
+yarn add 4everland-sdk
 
 ```
 
-**ESModule**
+**Esmodule**
 
 ```js
 import { Forever } from '4everland-sdk'
+
+const client = new Forever({
+  authServiceUrl: '',
+  pinningServiceUrl: '',
+  endpoint: '',
+  storageType: 'IPFS'
+})
+let address = '' // metamask address
+
+const signMessage = await client.getSignMessage(address)
+
+// Use signMessage for signing
+// ....
+
+// Verification signature
+// if expiration expired, you need Verification signature again
+const { expiration } = await client.validSign(address, signature)
+
+// upload
+const task = client.upload({
+  Key: file.name,
+  Body: file,
+  ContentType: file.type
+})
+task.progress((e) => {
+  // loaded , total
+})
+await task.done()
 ```
 
 **CommonJs**
@@ -29,8 +57,7 @@ const { Forever } = require('4everland-sdk')
 
 <script>
 
-const {Forever} = 4everland-sdk
-
+  const { Forever } = foreverland
 
 </script>
 

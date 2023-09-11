@@ -23,7 +23,7 @@ class BucketService {
         params
       })
     } catch (error: any) {
-      throw new Error('Params Error')
+      throw new Error('params error')
     }
     return {
       abort: async () => {
@@ -42,9 +42,9 @@ class BucketService {
             throw new Error(error.message)
           }
           if (error.name == 'AbortError') {
-            throw new Error('Upload aborted!')
+            throw new Error('upload aborted!')
           }
-          throw new Error('Service Error')
+          throw new Error('service error')
         }
       },
       progress: (cb?: (e: Progress) => void) => {

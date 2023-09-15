@@ -18,7 +18,9 @@
     "upload",
     "ipfs"
   ],
-  "author": "",
+  "author": "yepCing",
+  "repository": "https://github.com/yepCing/4everland-sdk",
+  "homepage": "https://github.com/yepCing/4everland-sdk",
   "license": "ISC",
   "devDependencies": {
     "@aws-sdk/types": "^3.391.0",

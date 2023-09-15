@@ -13,9 +13,9 @@ yarn add 4everland-sdk
 **Esmodule**
 
 ```js
-import { Forever } from '4everland-sdk'
+import { Client } from '4everland-sdk'
 
-const client = new Forever({
+const client = new Client({
   authServiceUrl: '',
   pinningServiceUrl: '',
   endpoint: '',
@@ -23,14 +23,14 @@ const client = new Forever({
 })
 let address = '' // metamask address
 
-const signMessage = await client.getSignMessage(address)
+const signMessage = await client.getSignText(address)
 
 // Use signMessage for signing
 // ....
 
 // Verification signature
 // if expiration expired, you need Verification signature again
-const { expiration } = await client.validSign(address, signature)
+const { expiration } = await client.verifySign(address, signature)
 
 // upload
 const task = client.upload({
@@ -41,13 +41,22 @@ const task = client.upload({
 task.progress((e) => {
   // loaded , total
 })
-await task.done()
+const { cid } = await task.done()
+
+const { requestid } = await client.addPin({
+  cid
+})
+// specified pin
+await clinet.getPin(requestid)
+
+// pin list
+await clinet.listPin()
 ```
 
 **CommonJs**
 
 ```js
-const { Forever } = require('4everland-sdk')
+const { Client } = require('4everland-sdk')
 ```
 
 **Browser**
@@ -57,7 +66,7 @@ const { Forever } = require('4everland-sdk')
 
 <script>
 
-  const { Forever } = foreverland
+  const { Client } = Clientland
 
 </script>
 

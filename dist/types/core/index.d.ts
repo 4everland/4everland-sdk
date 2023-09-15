@@ -1,19 +1,21 @@
 import AuthService from './auth';
 import BucketService from './bucket';
-import { ValidSignResult, ForeverConfig, ForeverUploadParams } from './type';
+import { ValidSignResult, ClientConfig, ClientUploadParams, PinParams, AddPinParams } from './type';
 import PinningService from './pinning';
-declare class Forever {
+declare class Client {
     auth: AuthService;
     bucket?: BucketService;
     validSignResult?: ValidSignResult;
-    config: ForeverConfig;
-    pinningService: PinningService;
-    constructor(config: ForeverConfig);
-    getSignMessage(address: string): Promise<string>;
-    validSign(address: string, signature: string): Promise<{
+    config: ClientConfig;
+    pinningService?: PinningService;
+    constructor(config: ClientConfig);
+    getSignText(address: string): Promise<string>;
+    verifySign(address: string, signature: string): Promise<{
         expiration: number;
     }>;
-    upload(params: ForeverUploadParams): import("./type").UploadResult;
-    pinning(cid: string): Promise<void>;
+    upload(params: ClientUploadParams): import("./type").UploadResult;
+    addPin(addPin: AddPinParams): Promise<import("./type").PinInfo>;
+    getPin(requestid: string): Promise<import("./type").PinInfo>;
+    listPin(params: PinParams): Promise<import("./type").ListPin>;
 }
-export default Forever;
+export default Client;

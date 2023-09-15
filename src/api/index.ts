@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { AuthApiError } from '../utils/errors'
 
 class Request {
   instance: AxiosInstance
@@ -11,10 +10,11 @@ class Request {
       },
       (error) => {
         // do something
-        if (error.message) {
-          return Promise.reject(new Error(error.message))
+        console.log(error, error.message, error.response)
+        if (error.response && error.response.data) {
+          return Promise.reject(error.response.data)
         }
-        return Promise.reject(new AuthApiError('Service Error', error.response))
+        return Promise.reject(new Error(error.message))
       }
     )
   }

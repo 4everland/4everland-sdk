@@ -1,29 +1,28 @@
 import AuthService from './auth'
 import BucketService from './bucket'
-import { ValidSignResult, ForeverConfig, ForeverUploadParams } from './type'
+import { ValidSignResult, ClientConfig, ClientUploadParams, PinParams, AddPinParams } from './type'
 import PinningService from './pinning'
-class Forever {
+class Client {
   auth: AuthService
   bucket?: BucketService
   validSignResult?: ValidSignResult
-  config: ForeverConfig
-  pinningService: PinningService
-  constructor(config: ForeverConfig) {
+  config: ClientConfig
+  pinningService?: PinningService
+  constructor(config: ClientConfig) {
     this.config = config
     this.auth = new AuthService(this.config.authServiceUrl)
-    this.pinningService = new PinningService(this.config.pinningServiceUrl)
   }
 
-  getSignMessage(address: string) {
-    return this.auth.getSignMessage(address)
+  getSignText(address: string) {
+    return this.auth.getSignText(address)
   }
-  async validSign(address: string, signature: string) {
+  async verifySign(address: string, signature: string) {
     return new Promise<{ expiration: number }>((resolve, reject) => {
       this.auth
-        .validSign<ValidSignResult>(address, signature)
+        .verifySign<ValidSignResult>(address, signature)
         .then((res) => {
           this.validSignResult = res
-          const { accessKeyId, secretAccessKey, sessionToken } = this.validSignResult
+          const { accessKeyId, secretAccessKey, sessionToken, token } = this.validSignResult
           this.bucket = new BucketService(
             {
               accessKeyId,
@@ -32,6 +31,8 @@ class Forever {
             },
             this.config.endpoint
           )
+          this.pinningService = new PinningService(this.config.pinningServiceUrl, token)
+
           resolve({
             expiration: this.validSignResult.expiration
           })
@@ -39,11 +40,11 @@ class Forever {
         .catch(reject)
     })
   }
-  upload(params: ForeverUploadParams) {
-    if (!this.validSignResult) {
+  upload(params: ClientUploadParams) {
+    if (!this.validSignResult || !this.bucket) {
       throw new Error('execution error')
     }
-    return this.bucket!.uploadObject({
+    return this.bucket.uploadObject({
       ...params,
       Bucket: this.validSignResult.accessBucket,
       Key: this.validSignResult.folderPath
@@ -51,12 +52,24 @@ class Forever {
         : params.Key
     })
   }
-  pinning(cid: string) {
-    if (!this.validSignResult) {
+  addPin(addPin: AddPinParams) {
+    if (!this.validSignResult || !this.pinningService) {
       throw new Error('execution error')
     }
-    return this.pinningService.pinning(cid, '4EVERLAND', this.validSignResult!.token)
+    return this.pinningService.addPin(addPin)
+  }
+  getPin(requestid: string) {
+    if (!this.validSignResult || !this.pinningService) {
+      throw new Error('execution error')
+    }
+    return this.pinningService.getPin(requestid)
+  }
+  listPin(params: PinParams) {
+    if (!this.validSignResult || !this.pinningService) {
+      throw new Error('execution error')
+    }
+    return this.pinningService.listPin(params)
   }
 }
 
-export default Forever
+export default Client

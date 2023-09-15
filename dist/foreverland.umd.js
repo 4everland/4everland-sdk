@@ -322,118 +322,6 @@
     });
     return Constructor;
   }
-  function _inherits(subClass, superClass) {
-    if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function");
-    }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        writable: true,
-        configurable: true
-      }
-    });
-    Object.defineProperty(subClass, "prototype", {
-      writable: false
-    });
-    if (superClass) _setPrototypeOf(subClass, superClass);
-  }
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) {
-      return o.__proto__ || Object.getPrototypeOf(o);
-    };
-    return _getPrototypeOf(o);
-  }
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) {
-      o.__proto__ = p;
-      return o;
-    };
-    return _setPrototypeOf(o, p);
-  }
-  function _isNativeReflectConstruct() {
-    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-    if (Reflect.construct.sham) return false;
-    if (typeof Proxy === "function") return true;
-    try {
-      Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-  function _construct(Parent, args, Class) {
-    if (_isNativeReflectConstruct()) {
-      _construct = Reflect.construct.bind();
-    } else {
-      _construct = function _construct(Parent, args, Class) {
-        var a = [null];
-        a.push.apply(a, args);
-        var Constructor = Function.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) _setPrototypeOf(instance, Class.prototype);
-        return instance;
-      };
-    }
-    return _construct.apply(null, arguments);
-  }
-  function _isNativeFunction(fn) {
-    return Function.toString.call(fn).indexOf("[native code]") !== -1;
-  }
-  function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : undefined;
-    _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null || !_isNativeFunction(Class)) return Class;
-      if (typeof Class !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class)) return _cache.get(Class);
-        _cache.set(Class, Wrapper);
-      }
-      function Wrapper() {
-        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
-      }
-      Wrapper.prototype = Object.create(Class.prototype, {
-        constructor: {
-          value: Wrapper,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      });
-      return _setPrototypeOf(Wrapper, Class);
-    };
-    return _wrapNativeSuper(Class);
-  }
-  function _assertThisInitialized(self) {
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self;
-  }
-  function _possibleConstructorReturn(self, call) {
-    if (call && (typeof call === "object" || typeof call === "function")) {
-      return call;
-    } else if (call !== void 0) {
-      throw new TypeError("Derived constructors may only return object or undefined");
-    }
-    return _assertThisInitialized(self);
-  }
-  function _createSuper(Derived) {
-    var hasNativeReflectConstruct = _isNativeReflectConstruct();
-    return function _createSuperInternal() {
-      var Super = _getPrototypeOf(Derived),
-        result;
-      if (hasNativeReflectConstruct) {
-        var NewTarget = _getPrototypeOf(this).constructor;
-        result = Reflect.construct(Super, arguments, NewTarget);
-      } else {
-        result = Super.apply(this, arguments);
-      }
-      return _possibleConstructorReturn(this, result);
-    };
-  }
   function _toPrimitive(input, hint) {
     if (typeof input !== "object" || input === null) return input;
     var prim = input[Symbol.toPrimitive];
@@ -5777,30 +5665,6 @@
   // this module should only have a default export
   var axios$1 = axios;
 
-  var ErrorBase = /*#__PURE__*/function (_Error) {
-    _inherits(ErrorBase, _Error);
-    var _super = _createSuper(ErrorBase);
-    function ErrorBase(name, message) {
-      var _this;
-      _classCallCheck(this, ErrorBase);
-      _this = _super.call(this);
-      _this.name = name;
-      _this.message = message;
-      return _this;
-    }
-    return _createClass(ErrorBase);
-  }( /*#__PURE__*/_wrapNativeSuper(Error));
-
-  var AuthApiError = /*#__PURE__*/function (_ErrorBase) {
-    _inherits(AuthApiError, _ErrorBase);
-    var _super = _createSuper(AuthApiError);
-    function AuthApiError() {
-      _classCallCheck(this, AuthApiError);
-      return _super.apply(this, arguments);
-    }
-    return _createClass(AuthApiError);
-  }(ErrorBase);
-
   var Request$1 = /*#__PURE__*/function () {
     function Request(config) {
       _classCallCheck(this, Request);
@@ -5809,10 +5673,11 @@
         return res;
       }, function (error) {
         // do something
-        if (error.message) {
-          return Promise.reject(new Error(error.message));
+        console.log(error, error.message, error.response);
+        if (error.response && error.response.data) {
+          return Promise.reject(error.response.data);
         }
-        return Promise.reject(new AuthApiError('Service Error', error.response));
+        return Promise.reject(new Error(error.message));
       });
     }
     _createClass(Request, [{
@@ -5866,8 +5731,8 @@
       });
     }
     _createClass(AuthService, [{
-      key: "getSignMessage",
-      value: function getSignMessage(address) {
+      key: "getSignText",
+      value: function getSignText(address) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
@@ -5883,8 +5748,8 @@
         }));
       }
     }, {
-      key: "validSign",
-      value: function validSign(address, signature) {
+      key: "verifySign",
+      value: function verifySign(address, signature) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
@@ -9740,7 +9605,7 @@ ${toHex(hashedRequest)}`;
     low: 1
   };
 
-  class Client {
+  let Client$1 = class Client {
     constructor(config) {
       this.middlewareStack = constructStack();
       this.config = config;
@@ -9758,7 +9623,7 @@ ${toHex(hashedRequest)}`;
     destroy() {
       if (this.config.requestHandler.destroy) this.config.requestHandler.destroy();
     }
-  }
+  };
 
   const alphabetByEncoding = {};
   const alphabetByValue = new Array(64);
@@ -15399,7 +15264,7 @@ ${toHex(hashedRequest)}`;
     };
   };
 
-  class S3Client extends Client {
+  class S3Client extends Client$1 {
     constructor(...[configuration]) {
       const _config_0 = getRuntimeConfig(configuration || {});
       const _config_1 = resolveClientEndpointParameters(_config_0);
@@ -38600,7 +38465,7 @@ ${toHex(hashedRequest)}`;
             params: params
           });
         } catch (error) {
-          throw new Error('Params Error');
+          throw new Error('params error');
         }
         return {
           abort: function abort() {
@@ -38647,9 +38512,9 @@ ${toHex(hashedRequest)}`;
                       _context2.next = 16;
                       break;
                     }
-                    throw new Error('Upload aborted!');
+                    throw new Error('upload aborted!');
                   case 16:
-                    throw new Error('Service Error');
+                    throw new Error('service error');
                   case 17:
                   case "end":
                     return _context2.stop();
@@ -38671,28 +38536,26 @@ ${toHex(hashedRequest)}`;
   }();
 
   var PinningService = /*#__PURE__*/function () {
-    function PinningService(baseUrl) {
+    function PinningService(baseUrl, accessToken) {
       _classCallCheck(this, PinningService);
       this.baseUrl = baseUrl;
+      this.accessToken = accessToken;
       this.request = new Request$1({
         baseURL: baseUrl
       });
     }
     _createClass(PinningService, [{
-      key: "pinning",
-      value: function pinning(cid, name, accessToken) {
+      key: "addPin",
+      value: function addPin(_addPin) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
                 return _context.abrupt("return", this.request.post({
                   url: '/pins',
-                  data: {
-                    cid: cid,
-                    name: name
-                  },
+                  data: _addPin,
                   headers: {
-                    Authorization: 'Bearer ' + accessToken
+                    Authorization: 'Bearer ' + this.accessToken
                   }
                 }));
               case 1:
@@ -38702,42 +38565,87 @@ ${toHex(hashedRequest)}`;
           }, _callee, this);
         }));
       }
+    }, {
+      key: "getPin",
+      value: function getPin(requestid) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                return _context2.abrupt("return", this.request.get({
+                  url: '/pins/' + requestid,
+                  headers: {
+                    Authorization: 'Bearer ' + this.accessToken
+                  }
+                }));
+              case 1:
+              case "end":
+                return _context2.stop();
+            }
+          }, _callee2, this);
+        }));
+      }
+    }, {
+      key: "listPin",
+      value: function listPin(params) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
+              case 0:
+                return _context3.abrupt("return", this.request.get({
+                  url: '/pins',
+                  params: Object.assign({
+                    match: 'partial',
+                    status: 'queued,pinned,pinning,failed'
+                  }, params),
+                  headers: {
+                    Authorization: 'Bearer ' + this.accessToken
+                  }
+                }));
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }, _callee3, this);
+        }));
+      }
     }]);
     return PinningService;
   }();
 
-  var Forever = /*#__PURE__*/function () {
-    function Forever(config) {
-      _classCallCheck(this, Forever);
+  var Client = /*#__PURE__*/function () {
+    function Client(config) {
+      _classCallCheck(this, Client);
       this.config = config;
       this.auth = new AuthService(this.config.authServiceUrl);
-      this.pinningService = new PinningService(this.config.pinningServiceUrl);
     }
-    _createClass(Forever, [{
-      key: "getSignMessage",
-      value: function getSignMessage(address) {
-        return this.auth.getSignMessage(address);
+    _createClass(Client, [{
+      key: "getSignText",
+      value: function getSignText(address) {
+        return this.auth.getSignText(address);
       }
     }, {
-      key: "validSign",
-      value: function validSign(address, signature) {
+      key: "verifySign",
+      value: function verifySign(address, signature) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
           var _this = this;
           return _regeneratorRuntime().wrap(function _callee$(_context) {
             while (1) switch (_context.prev = _context.next) {
               case 0:
                 return _context.abrupt("return", new Promise(function (resolve, reject) {
-                  _this.auth.validSign(address, signature).then(function (res) {
+                  _this.auth.verifySign(address, signature).then(function (res) {
                     _this.validSignResult = res;
                     var _this$validSignResult = _this.validSignResult,
                       accessKeyId = _this$validSignResult.accessKeyId,
                       secretAccessKey = _this$validSignResult.secretAccessKey,
-                      sessionToken = _this$validSignResult.sessionToken;
+                      sessionToken = _this$validSignResult.sessionToken,
+                      token = _this$validSignResult.token;
                     _this.bucket = new BucketService({
                       accessKeyId: accessKeyId,
                       secretAccessKey: secretAccessKey,
                       sessionToken: sessionToken
                     }, _this.config.endpoint);
+                    _this.pinningService = new PinningService(_this.config.pinningServiceUrl, token);
                     resolve({
                       expiration: _this.validSignResult.expiration
                     });
@@ -38753,7 +38661,7 @@ ${toHex(hashedRequest)}`;
     }, {
       key: "upload",
       value: function upload(params) {
-        if (!this.validSignResult) {
+        if (!this.validSignResult || !this.bucket) {
           throw new Error('execution error');
         }
         return this.bucket.uploadObject(Object.assign(Object.assign({}, params), {
@@ -38762,20 +38670,36 @@ ${toHex(hashedRequest)}`;
         }));
       }
     }, {
-      key: "pinning",
-      value: function pinning(cid) {
-        if (!this.validSignResult) {
+      key: "addPin",
+      value: function addPin(_addPin) {
+        if (!this.validSignResult || !this.pinningService) {
           throw new Error('execution error');
         }
-        return this.pinningService.pinning(cid, '4EVERLAND', this.validSignResult.token);
+        return this.pinningService.addPin(_addPin);
+      }
+    }, {
+      key: "getPin",
+      value: function getPin(requestid) {
+        if (!this.validSignResult || !this.pinningService) {
+          throw new Error('execution error');
+        }
+        return this.pinningService.getPin(requestid);
+      }
+    }, {
+      key: "listPin",
+      value: function listPin(params) {
+        if (!this.validSignResult || !this.pinningService) {
+          throw new Error('execution error');
+        }
+        return this.pinningService.listPin(params);
       }
     }]);
-    return Forever;
+    return Client;
   }();
 
   exports.AuthService = AuthService;
   exports.BucketService = BucketService;
-  exports.Forever = Forever;
+  exports.Client = Client;
   exports.PinningService = PinningService;
 
 }));

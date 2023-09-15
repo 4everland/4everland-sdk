@@ -8,12 +8,12 @@ class AuthService {
       baseURL: baseUrl
     })
   }
-  async getSignMessage(address: string) {
+  async getSignText(address: string) {
     return this.request.get<string>({
       url: `/auth/${address}`
     })
   }
-  async validSign<T>(address: string, signature: string) {
+  async verifySign<T>(address: string, signature: string) {
     return this.request.post<T>({
       url: `/auth/${address}`,
       data: { signature }

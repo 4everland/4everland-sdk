@@ -15,9 +15,9 @@
     <button id="getSign">Get Sign</button>
   </div>
 
-  <!-- <script src="../dist/foreverland.umd.min.js"></script> -->
+  <script src="../dist/foreverland.umd.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/gh/yepCing/4everland-sdk@1.0.0/dist/foreverland.umd.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/gh/yepCing/4everland-sdk@1.0.0/dist/foreverland.umd.min.js"></script> -->
   <script>
     function strToArrayBuffer(str) {
       let array = new Int8Array(str.length);
@@ -45,10 +45,8 @@
     })
 
 
-
-
-    const { Forever } = foreverland
-    let client = new Forever({
+    const { Client } = foreverland
+    let client = new Client({
       authServiceUrl: 'https://sts-api.foreverland.xyz',
       pinningServiceUrl: 'https://pinning.foreverland.xyz',
       endpoint: 'https://s3gw.foreverland.xyz',
@@ -57,7 +55,6 @@
 
     // get signatureText -> metamask signature -> valid signature
     async function getSign() {
-
       try {
         const accounts = await window.ethereum
           .request({ method: 'eth_requestAccounts' })
@@ -68,7 +65,7 @@
               console.error(err)
             }
           })
-        const nonce = await client.getSignMessage(accounts[0])
+        const nonce = await client.getSignText(accounts[0])
         let byteBuffer = strToArrayBuffer(nonce)
         let dataview = new DataView(byteBuffer, 0, byteBuffer.byteLength)
         let res = ""
@@ -84,7 +81,7 @@
           method: 'personal_sign',
           params: [msg, accounts[0], ''],
         })
-        const { expiration } = await client.validSign(accounts[0], sign)
+        const { expiration } = await client.verifySign(accounts[0], sign)
         console.log(expiration)
         expireTime = expiration * 1e3
       } catch (error) {
@@ -94,8 +91,6 @@
 
 
     const handleUpload = async () => {
-
-
       try {
         if (expireTime <= +new Date()) {
           await getSign()
@@ -113,7 +108,14 @@
         })
         const { cid } = await uploadObject.done()
         console.log(cid)
-        await client.pinning(cid)
+        const { requestid } = await client.addPin({
+          cid,
+          name: '4everland'
+        })
+        const data = await client.getPin(requestid)
+        console.log(data)
+        const info = await client.listPin()
+        console.log(info)
       } catch (error) {
         console.log(error)
       }

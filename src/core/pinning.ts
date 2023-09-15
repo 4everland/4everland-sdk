@@ -1,23 +1,46 @@
 import Request from '../api'
+import { ListPin, PinParams, AddPinParams, PinInfo } from './type'
+
 class PinningService {
   baseUrl: string
+  accessToken: string
   request: Request
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, accessToken: string) {
     this.baseUrl = baseUrl
+    this.accessToken = accessToken
     this.request = new Request({
       baseURL: baseUrl
     })
   }
 
-  async pinning(cid: string, name: string, accessToken: string) {
-    return this.request.post<void>({
+  async addPin(addPin: AddPinParams) {
+    return this.request.post<PinInfo>({
       url: '/pins',
-      data: {
-        cid,
-        name
+      data: addPin,
+      headers: {
+        Authorization: 'Bearer ' + this.accessToken
+      }
+    })
+  }
+  async getPin(requestid: string) {
+    return this.request.get<PinInfo>({
+      url: '/pins/' + requestid,
+      headers: {
+        Authorization: 'Bearer ' + this.accessToken
+      }
+    })
+  }
+
+  async listPin(params: PinParams) {
+    return this.request.get<ListPin>({
+      url: '/pins',
+      params: {
+        match: 'partial',
+        status: 'queued,pinned,pinning,failed',
+        ...params
       },
       headers: {
-        Authorization: 'Bearer ' + accessToken
+        Authorization: 'Bearer ' + this.accessToken
       }
     })
   }

@@ -1,7 +1,7 @@
 import { Progress } from '@aws-sdk/lib-storage'
 import { StreamingBlobPayloadInputTypes } from '@smithy/types'
 
-export interface ValidSignResult extends Credentials {
+export interface verifySignResult extends Credentials {
   expiration: number
   accessBucket: string
   folderPath: string

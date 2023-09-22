@@ -1,12 +1,16 @@
 import Request from '../api';
 import { ListPin, PinParams, AddPinParams, PinInfo } from './type';
-declare class PinningService {
-    baseUrl: string;
+interface PinningClientParams {
+    baseURL: string;
+    accessToken: string;
+}
+declare class PinningClient {
+    baseURL: string;
     accessToken: string;
     request: Request;
-    constructor(baseUrl: string, accessToken: string);
+    constructor(params: PinningClientParams);
     addPin(addPin: AddPinParams): Promise<PinInfo>;
     getPin(requestid: string): Promise<PinInfo>;
-    listPin(params: PinParams): Promise<ListPin>;
+    listPin(params?: PinParams): Promise<ListPin>;
 }
-export default PinningService;
+export default PinningClient;

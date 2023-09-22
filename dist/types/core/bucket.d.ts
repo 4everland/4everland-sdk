@@ -1,10 +1,13 @@
-import type { Credentials, PutObjectParams, UploadResult } from './type';
-declare class BucketService {
+import type { PutObjectParams, UploadResult } from './type';
+interface BucketClientParams {
+    accessKeyId: string;
+    secretAccessKey: string;
+    sessionToken: string;
+    endpoint: string;
+}
+declare class BucketClient {
     private instance;
-    credentials: Credentials;
-    forcePathStyle: boolean;
-    region: string;
-    constructor(credentials: Credentials, endpoint?: string);
+    constructor(params: BucketClientParams);
     uploadObject(params: PutObjectParams): UploadResult;
 }
-export default BucketService;
+export default BucketClient;

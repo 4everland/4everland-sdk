@@ -1,11 +1,12 @@
+import { verifySignResult } from './type'
 import Request from '../api'
-class AuthService {
-  baseUrl: string
+class AuthClient {
+  baseURL: string
   request: Request
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl
+  constructor(baseURL: string) {
+    this.baseURL = baseURL
     this.request = new Request({
-      baseURL: baseUrl
+      baseURL: baseURL
     })
   }
   async getSignText(address: string) {
@@ -13,12 +14,12 @@ class AuthService {
       url: `/auth/${address}`
     })
   }
-  async verifySign<T>(address: string, signature: string) {
-    return this.request.post<T>({
+  async verifySign(address: string, signature: string) {
+    return this.request.post<verifySignResult>({
       url: `/auth/${address}`,
       data: { signature }
     })
   }
 }
 
-export default AuthService
+export default AuthClient

@@ -1,5 +1,5 @@
-import Client from './core';
-import BucketService from './core/bucket';
-import AuthService from './core/auth';
-import PinningService from './core/pinning';
-export { Client, BucketService, AuthService, PinningService };
+import BucketClient from './core/bucket';
+import AuthClient from './core/auth';
+import PinningClient from './core/pinning';
+export * from './core/type';
+export { BucketClient, AuthClient, PinningClient };

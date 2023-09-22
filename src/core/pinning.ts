@@ -1,15 +1,19 @@
 import Request from '../api'
 import { ListPin, PinParams, AddPinParams, PinInfo } from './type'
 
-class PinningService {
-  baseUrl: string
+interface PinningClientParams {
+  baseURL: string
+  accessToken: string
+}
+class PinningClient {
+  baseURL: string
   accessToken: string
   request: Request
-  constructor(baseUrl: string, accessToken: string) {
-    this.baseUrl = baseUrl
-    this.accessToken = accessToken
+  constructor(params: PinningClientParams) {
+    this.baseURL = params.baseURL
+    this.accessToken = params.accessToken
     this.request = new Request({
-      baseURL: baseUrl
+      baseURL: params.baseURL
     })
   }
 
@@ -31,7 +35,7 @@ class PinningService {
     })
   }
 
-  async listPin(params: PinParams) {
+  async listPin(params?: PinParams) {
     return this.request.get<ListPin>({
       url: '/pins',
       params: {
@@ -46,4 +50,4 @@ class PinningService {
   }
 }
 
-export default PinningService
+export default PinningClient

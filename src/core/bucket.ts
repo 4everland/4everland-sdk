@@ -1,19 +1,26 @@
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
 import { Upload, Progress } from '@aws-sdk/lib-storage'
-import type { Credentials, PutObjectParams, UploadResult } from './type'
-class BucketService {
+import type { PutObjectParams, UploadResult } from './type'
+
+interface BucketClientParams {
+  accessKeyId: string
+  secretAccessKey: string
+  sessionToken: string
+  endpoint: string
+}
+class BucketClient {
   private instance: S3
-  credentials: Credentials
-  forcePathStyle = false
-  region = 'eu-west-2'
-  constructor(credentials: Credentials, endpoint?: string) {
+  constructor(params: BucketClientParams) {
     this.instance = new S3({
-      endpoint: endpoint,
-      credentials,
-      forcePathStyle: this.forcePathStyle,
-      region: this.region
+      endpoint: params.endpoint,
+      credentials: {
+        accessKeyId: params.accessKeyId,
+        secretAccessKey: params.secretAccessKey,
+        sessionToken: params.sessionToken
+      },
+      forcePathStyle: false,
+      region: 'eu-west-2'
     })
-    this.credentials = credentials
   }
   uploadObject(params: PutObjectParams): UploadResult {
     let task: Upload
@@ -57,4 +64,4 @@ class BucketService {
     }
   }
 }
-export default BucketService
+export default BucketClient

@@ -1,9 +1,10 @@
+import { verifySignResult } from './type';
 import Request from '../api';
-declare class AuthService {
-    baseUrl: string;
+declare class AuthClient {
+    baseURL: string;
     request: Request;
-    constructor(baseUrl: string);
+    constructor(baseURL: string);
     getSignText(address: string): Promise<string>;
-    verifySign<T>(address: string, signature: string): Promise<T>;
+    verifySign(address: string, signature: string): Promise<verifySignResult>;
 }
-export default AuthService;
+export default AuthClient;

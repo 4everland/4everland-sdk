@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.foreverland = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.uploadPin = {}));
 })(this, (function (exports) { 'use strict';
 
   function _regeneratorRuntime() {
@@ -890,39 +890,39 @@
     default: tslib_es6
   });
 
-  var HttpAuthLocation;
+  var HttpAuthLocation$1;
   (function (HttpAuthLocation) {
     HttpAuthLocation["HEADER"] = "header";
     HttpAuthLocation["QUERY"] = "query";
-  })(HttpAuthLocation || (HttpAuthLocation = {}));
+  })(HttpAuthLocation$1 || (HttpAuthLocation$1 = {}));
 
-  var EndpointURLScheme;
+  var EndpointURLScheme$1;
   (function (EndpointURLScheme) {
     EndpointURLScheme["HTTP"] = "http";
     EndpointURLScheme["HTTPS"] = "https";
-  })(EndpointURLScheme || (EndpointURLScheme = {}));
+  })(EndpointURLScheme$1 || (EndpointURLScheme$1 = {}));
 
-  var AlgorithmId;
+  var AlgorithmId$1;
   (function (AlgorithmId) {
     AlgorithmId["MD5"] = "md5";
     AlgorithmId["CRC32"] = "crc32";
     AlgorithmId["CRC32C"] = "crc32c";
     AlgorithmId["SHA1"] = "sha1";
     AlgorithmId["SHA256"] = "sha256";
-  })(AlgorithmId || (AlgorithmId = {}));
+  })(AlgorithmId$1 || (AlgorithmId$1 = {}));
 
-  var FieldPosition;
+  var FieldPosition$1;
   (function (FieldPosition) {
     FieldPosition[FieldPosition["HEADER"] = 0] = "HEADER";
     FieldPosition[FieldPosition["TRAILER"] = 1] = "TRAILER";
-  })(FieldPosition || (FieldPosition = {}));
+  })(FieldPosition$1 || (FieldPosition$1 = {}));
 
-  var RequestHandlerProtocol;
+  var RequestHandlerProtocol$1;
   (function (RequestHandlerProtocol) {
     RequestHandlerProtocol["HTTP_0_9"] = "http/0.9";
     RequestHandlerProtocol["HTTP_1_0"] = "http/1.0";
     RequestHandlerProtocol["TDS_8_0"] = "tds/8.0";
-  })(RequestHandlerProtocol || (RequestHandlerProtocol = {}));
+  })(RequestHandlerProtocol$1 || (RequestHandlerProtocol$1 = {}));
 
   class HttpRequest {
     constructor(options) {
@@ -5234,8 +5234,8 @@ ${toHex(hashedRequest)}`;
   })(HostAddressType || (HostAddressType = {}));
 
   const DEFAULT_PORTS = {
-    [EndpointURLScheme.HTTP]: 80,
-    [EndpointURLScheme.HTTPS]: 443
+    [EndpointURLScheme$1.HTTP]: 80,
+    [EndpointURLScheme$1.HTTPS]: 443
   };
   const parseURL = value => {
     const whatwgURL = (() => {
@@ -5276,7 +5276,7 @@ ${toHex(hashedRequest)}`;
       return null;
     }
     const scheme = protocol.slice(0, -1);
-    if (!Object.values(EndpointURLScheme).includes(scheme)) {
+    if (!Object.values(EndpointURLScheme$1).includes(scheme)) {
       return null;
     }
     const isIp = isIpAddress(hostname);
@@ -5772,16 +5772,16 @@ ${toHex(hashedRequest)}`;
     }
   });
 
-  const resolveParamsForS3 = async endpointParams => {
+  const resolveParamsForS3$1 = async endpointParams => {
     const bucket = endpointParams?.Bucket || "";
     if (typeof endpointParams.Bucket === "string") {
       endpointParams.Bucket = bucket.replace(/#/g, encodeURIComponent("#")).replace(/\?/g, encodeURIComponent("?"));
     }
-    if (isArnBucketName(bucket)) {
+    if (isArnBucketName$1(bucket)) {
       if (endpointParams.ForcePathStyle === true) {
         throw new Error("Path-style addressing cannot be used with ARN buckets");
       }
-    } else if (!isDnsCompatibleBucketName(bucket) || bucket.indexOf(".") !== -1 && !String(endpointParams.Endpoint).startsWith("http:") || bucket.toLowerCase() !== bucket || bucket.length < 3) {
+    } else if (!isDnsCompatibleBucketName$1(bucket) || bucket.indexOf(".") !== -1 && !String(endpointParams.Endpoint).startsWith("http:") || bucket.toLowerCase() !== bucket || bucket.length < 3) {
       endpointParams.ForcePathStyle = true;
     }
     if (endpointParams.DisableMultiRegionAccessPoints) {
@@ -5790,11 +5790,11 @@ ${toHex(hashedRequest)}`;
     }
     return endpointParams;
   };
-  const DOMAIN_PATTERN = /^[a-z0-9][a-z0-9\.\-]{1,61}[a-z0-9]$/;
-  const IP_ADDRESS_PATTERN = /(\d+\.){3}\d+/;
-  const DOTS_PATTERN = /\.\./;
-  const isDnsCompatibleBucketName = bucketName => DOMAIN_PATTERN.test(bucketName) && !IP_ADDRESS_PATTERN.test(bucketName) && !DOTS_PATTERN.test(bucketName);
-  const isArnBucketName = bucketName => {
+  const DOMAIN_PATTERN$1 = /^[a-z0-9][a-z0-9\.\-]{1,61}[a-z0-9]$/;
+  const IP_ADDRESS_PATTERN$1 = /(\d+\.){3}\d+/;
+  const DOTS_PATTERN$1 = /\.\./;
+  const isDnsCompatibleBucketName$1 = bucketName => DOMAIN_PATTERN$1.test(bucketName) && !IP_ADDRESS_PATTERN$1.test(bucketName) && !DOTS_PATTERN$1.test(bucketName);
+  const isArnBucketName$1 = bucketName => {
     const [arn, partition, service, region, account, typeOrId] = bucketName.split(":");
     const isArn = arn === "arn" && bucketName.split(":").length >= 6;
     const isValidArn = [arn, partition, service, account, typeOrId].filter(Boolean).length === 5;
@@ -5804,7 +5804,7 @@ ${toHex(hashedRequest)}`;
     return arn === "arn" && !!partition && !!service && !!account && !!typeOrId;
   };
 
-  const createConfigValueProvider = (configKey, canonicalEndpointParamKey, config) => {
+  const createConfigValueProvider$1 = (configKey, canonicalEndpointParamKey, config) => {
     const configProvider = async () => {
       const configValue = config[configKey] ?? config[canonicalEndpointParamKey];
       if (typeof configValue === "function") {
@@ -5835,15 +5835,15 @@ ${toHex(hashedRequest)}`;
     return configProvider;
   };
 
-  const getEndpointFromInstructions = async (commandInput, instructionsSupplier, clientConfig, context) => {
-    const endpointParams = await resolveParams(commandInput, instructionsSupplier, clientConfig);
+  const getEndpointFromInstructions$1 = async (commandInput, instructionsSupplier, clientConfig, context) => {
+    const endpointParams = await resolveParams$1(commandInput, instructionsSupplier, clientConfig);
     if (typeof clientConfig.endpointProvider !== "function") {
       throw new Error("config.endpointProvider is not set.");
     }
     const endpoint = clientConfig.endpointProvider(endpointParams, context);
     return endpoint;
   };
-  const resolveParams = async (commandInput, instructionsSupplier, clientConfig) => {
+  const resolveParams$1 = async (commandInput, instructionsSupplier, clientConfig) => {
     const endpointParams = {};
     const instructions = instructionsSupplier?.getEndpointParameterInstructions?.() || {};
     for (const [name, instruction] of Object.entries(instructions)) {
@@ -5856,7 +5856,7 @@ ${toHex(hashedRequest)}`;
           break;
         case "clientContextParams":
         case "builtInParams":
-          endpointParams[name] = await createConfigValueProvider(instruction.name, name, clientConfig)();
+          endpointParams[name] = await createConfigValueProvider$1(instruction.name, name, clientConfig)();
           break;
         default:
           throw new Error("Unrecognized endpoint parameter instruction: " + JSON.stringify(instruction));
@@ -5866,12 +5866,12 @@ ${toHex(hashedRequest)}`;
       Object.assign(endpointParams, clientConfig);
     }
     if (String(clientConfig.serviceId).toLowerCase() === "s3") {
-      await resolveParamsForS3(endpointParams);
+      await resolveParamsForS3$1(endpointParams);
     }
     return endpointParams;
   };
 
-  function parseQueryString(querystring) {
+  function parseQueryString$1(querystring) {
     const query = {};
     querystring = querystring.replace(/^\?/, "");
     if (querystring) {
@@ -5893,9 +5893,9 @@ ${toHex(hashedRequest)}`;
     return query;
   }
 
-  const parseUrl = url => {
+  const parseUrl$1 = url => {
     if (typeof url === "string") {
-      return parseUrl(new URL(url));
+      return parseUrl$1(new URL(url));
     }
     const {
       hostname,
@@ -5906,7 +5906,7 @@ ${toHex(hashedRequest)}`;
     } = url;
     let query;
     if (search) {
-      query = parseQueryString(search);
+      query = parseQueryString$1(search);
     }
     return {
       hostname,
@@ -5917,14 +5917,14 @@ ${toHex(hashedRequest)}`;
     };
   };
 
-  const toEndpointV1 = endpoint => {
+  const toEndpointV1$1 = endpoint => {
     if (typeof endpoint === "object") {
       if ("url" in endpoint) {
-        return parseUrl(endpoint.url);
+        return parseUrl$1(endpoint.url);
       }
       return endpoint;
     }
-    return parseUrl(endpoint);
+    return parseUrl$1(endpoint);
   };
 
   const endpointMiddleware = ({
@@ -5932,7 +5932,7 @@ ${toHex(hashedRequest)}`;
     instructions
   }) => {
     return (next, context) => async args => {
-      const endpoint = await getEndpointFromInstructions(args.input, {
+      const endpoint = await getEndpointFromInstructions$1(args.input, {
         getEndpointParameterInstructions() {
           return instructions;
         }
@@ -6032,7 +6032,7 @@ ${toHex(hashedRequest)}`;
     const {
       endpoint
     } = input;
-    const customEndpointProvider = endpoint != null ? async () => toEndpointV1(await normalizeProvider(endpoint)()) : undefined;
+    const customEndpointProvider = endpoint != null ? async () => toEndpointV1$1(await normalizeProvider(endpoint)()) : undefined;
     const isCustomEndpoint = !!endpoint;
     return {
       ...input,
@@ -7535,7 +7535,7 @@ ${toHex(hashedRequest)}`;
     }
   };
 
-  function extendedEncodeURIComponent(str) {
+  function extendedEncodeURIComponent$1(str) {
     return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
       return "%" + c.charCodeAt(0).toString(16).toUpperCase();
     });
@@ -7555,22 +7555,22 @@ ${toHex(hashedRequest)}`;
     return obj;
   };
 
-  const StringWrapper = function () {
+  const StringWrapper$1 = function () {
     const Class = Object.getPrototypeOf(this).constructor;
     const Constructor = Function.bind.apply(String, [null, ...arguments]);
     const instance = new Constructor();
     Object.setPrototypeOf(instance, Class.prototype);
     return instance;
   };
-  StringWrapper.prototype = Object.create(String.prototype, {
+  StringWrapper$1.prototype = Object.create(String.prototype, {
     constructor: {
-      value: StringWrapper,
+      value: StringWrapper$1,
       enumerable: false,
       writable: true,
       configurable: true
     }
   });
-  Object.setPrototypeOf(StringWrapper, String);
+  Object.setPrototypeOf(StringWrapper$1, String);
 
   function map(arg0, arg1, arg2) {
     let target;
@@ -7651,7 +7651,7 @@ ${toHex(hashedRequest)}`;
       if (labelValue.length <= 0) {
         throw new Error("Empty value provided for input HTTP label: " + memberName + ".");
       }
-      resolvedPath = resolvedPath.replace(uriLabel, isGreedyLabel ? labelValue.split("/").map(segment => extendedEncodeURIComponent(segment)).join("/") : extendedEncodeURIComponent(labelValue));
+      resolvedPath = resolvedPath.replace(uriLabel, isGreedyLabel ? labelValue.split("/").map(segment => extendedEncodeURIComponent$1(segment)).join("/") : extendedEncodeURIComponent$1(labelValue));
     } else {
       throw new Error("No value provided for input HTTP label: " + memberName + ".");
     }
@@ -12299,7 +12299,7 @@ ${toHex(hashedRequest)}`;
     serviceId: config?.serviceId ?? "S3",
     signerConstructor: config?.signerConstructor ?? SignatureV4MultiRegion,
     signingEscapePath: config?.signingEscapePath ?? false,
-    urlParser: config?.urlParser ?? parseUrl,
+    urlParser: config?.urlParser ?? parseUrl$1,
     useArnRegion: config?.useArnRegion ?? false,
     utf8Decoder: config?.utf8Decoder ?? fromUtf8,
     utf8Encoder: config?.utf8Encoder ?? toUtf8
@@ -32214,6 +32214,237 @@ ${toHex(hashedRequest)}`;
     }
   };
 
+  const resolveParamsForS3 = async endpointParams => {
+    const bucket = endpointParams?.Bucket || "";
+    if (typeof endpointParams.Bucket === "string") {
+      endpointParams.Bucket = bucket.replace(/#/g, encodeURIComponent("#")).replace(/\?/g, encodeURIComponent("?"));
+    }
+    if (isArnBucketName(bucket)) {
+      if (endpointParams.ForcePathStyle === true) {
+        throw new Error("Path-style addressing cannot be used with ARN buckets");
+      }
+    } else if (!isDnsCompatibleBucketName(bucket) || bucket.indexOf(".") !== -1 && !String(endpointParams.Endpoint).startsWith("http:") || bucket.toLowerCase() !== bucket || bucket.length < 3) {
+      endpointParams.ForcePathStyle = true;
+    }
+    if (endpointParams.DisableMultiRegionAccessPoints) {
+      endpointParams.disableMultiRegionAccessPoints = true;
+      endpointParams.DisableMRAP = true;
+    }
+    return endpointParams;
+  };
+  const DOMAIN_PATTERN = /^[a-z0-9][a-z0-9\.\-]{1,61}[a-z0-9]$/;
+  const IP_ADDRESS_PATTERN = /(\d+\.){3}\d+/;
+  const DOTS_PATTERN = /\.\./;
+  const isDnsCompatibleBucketName = bucketName => DOMAIN_PATTERN.test(bucketName) && !IP_ADDRESS_PATTERN.test(bucketName) && !DOTS_PATTERN.test(bucketName);
+  const isArnBucketName = bucketName => {
+    const [arn, partition, service, region, account, typeOrId] = bucketName.split(":");
+    const isArn = arn === "arn" && bucketName.split(":").length >= 6;
+    const isValidArn = [arn, partition, service, account, typeOrId].filter(Boolean).length === 5;
+    if (isArn && !isValidArn) {
+      throw new Error(`Invalid ARN: ${bucketName} was an invalid ARN.`);
+    }
+    return arn === "arn" && !!partition && !!service && !!account && !!typeOrId;
+  };
+
+  const createConfigValueProvider = (configKey, canonicalEndpointParamKey, config) => {
+    const configProvider = async () => {
+      const configValue = config[configKey] ?? config[canonicalEndpointParamKey];
+      if (typeof configValue === "function") {
+        return configValue();
+      }
+      return configValue;
+    };
+    if (configKey === "endpoint" || canonicalEndpointParamKey === "endpoint") {
+      return async () => {
+        const endpoint = await configProvider();
+        if (endpoint && typeof endpoint === "object") {
+          if ("url" in endpoint) {
+            return endpoint.url.href;
+          }
+          if ("hostname" in endpoint) {
+            const {
+              protocol,
+              hostname,
+              port,
+              path
+            } = endpoint;
+            return `${protocol}//${hostname}${port ? ":" + port : ""}${path}`;
+          }
+        }
+        return endpoint;
+      };
+    }
+    return configProvider;
+  };
+
+  const getEndpointFromConfig = async serviceId => undefined;
+
+  function parseQueryString(querystring) {
+    const query = {};
+    querystring = querystring.replace(/^\?/, "");
+    if (querystring) {
+      for (const pair of querystring.split("&")) {
+        let [key, value = null] = pair.split("=");
+        key = decodeURIComponent(key);
+        if (value) {
+          value = decodeURIComponent(value);
+        }
+        if (!(key in query)) {
+          query[key] = value;
+        } else if (Array.isArray(query[key])) {
+          query[key].push(value);
+        } else {
+          query[key] = [query[key], value];
+        }
+      }
+    }
+    return query;
+  }
+
+  const parseUrl = url => {
+    if (typeof url === "string") {
+      return parseUrl(new URL(url));
+    }
+    const {
+      hostname,
+      pathname,
+      port,
+      protocol,
+      search
+    } = url;
+    let query;
+    if (search) {
+      query = parseQueryString(search);
+    }
+    return {
+      hostname,
+      port: port ? parseInt(port) : undefined,
+      protocol,
+      path: pathname,
+      query
+    };
+  };
+
+  const toEndpointV1 = endpoint => {
+    if (typeof endpoint === "object") {
+      if ("url" in endpoint) {
+        return parseUrl(endpoint.url);
+      }
+      return endpoint;
+    }
+    return parseUrl(endpoint);
+  };
+
+  const getEndpointFromInstructions = async (commandInput, instructionsSupplier, clientConfig, context) => {
+    if (!clientConfig.endpoint) {
+      const endpointFromConfig = await getEndpointFromConfig(clientConfig.serviceId || "");
+      if (endpointFromConfig) {
+        clientConfig.endpoint = () => Promise.resolve(toEndpointV1(endpointFromConfig));
+      }
+    }
+    const endpointParams = await resolveParams(commandInput, instructionsSupplier, clientConfig);
+    if (typeof clientConfig.endpointProvider !== "function") {
+      throw new Error("config.endpointProvider is not set.");
+    }
+    const endpoint = clientConfig.endpointProvider(endpointParams, context);
+    return endpoint;
+  };
+  const resolveParams = async (commandInput, instructionsSupplier, clientConfig) => {
+    const endpointParams = {};
+    const instructions = instructionsSupplier?.getEndpointParameterInstructions?.() || {};
+    for (const [name, instruction] of Object.entries(instructions)) {
+      switch (instruction.type) {
+        case "staticContextParams":
+          endpointParams[name] = instruction.value;
+          break;
+        case "contextParams":
+          endpointParams[name] = commandInput[instruction.name];
+          break;
+        case "clientContextParams":
+        case "builtInParams":
+          endpointParams[name] = await createConfigValueProvider(instruction.name, name, clientConfig)();
+          break;
+        default:
+          throw new Error("Unrecognized endpoint parameter instruction: " + JSON.stringify(instruction));
+      }
+    }
+    if (Object.keys(instructions).length === 0) {
+      Object.assign(endpointParams, clientConfig);
+    }
+    if (String(clientConfig.serviceId).toLowerCase() === "s3") {
+      await resolveParamsForS3(endpointParams);
+    }
+    return endpointParams;
+  };
+
+  var HttpAuthLocation;
+  (function (HttpAuthLocation) {
+    HttpAuthLocation["HEADER"] = "header";
+    HttpAuthLocation["QUERY"] = "query";
+  })(HttpAuthLocation || (HttpAuthLocation = {}));
+
+  var EndpointURLScheme;
+  (function (EndpointURLScheme) {
+    EndpointURLScheme["HTTP"] = "http";
+    EndpointURLScheme["HTTPS"] = "https";
+  })(EndpointURLScheme || (EndpointURLScheme = {}));
+
+  var AlgorithmId;
+  (function (AlgorithmId) {
+    AlgorithmId["MD5"] = "md5";
+    AlgorithmId["CRC32"] = "crc32";
+    AlgorithmId["CRC32C"] = "crc32c";
+    AlgorithmId["SHA1"] = "sha1";
+    AlgorithmId["SHA256"] = "sha256";
+  })(AlgorithmId || (AlgorithmId = {}));
+
+  var FieldPosition;
+  (function (FieldPosition) {
+    FieldPosition[FieldPosition["HEADER"] = 0] = "HEADER";
+    FieldPosition[FieldPosition["TRAILER"] = 1] = "TRAILER";
+  })(FieldPosition || (FieldPosition = {}));
+
+  var IniSectionType;
+  (function (IniSectionType) {
+    IniSectionType["PROFILE"] = "profile";
+    IniSectionType["SSO_SESSION"] = "sso-session";
+    IniSectionType["SERVICES"] = "services";
+  })(IniSectionType || (IniSectionType = {}));
+
+  var RequestHandlerProtocol;
+  (function (RequestHandlerProtocol) {
+    RequestHandlerProtocol["HTTP_0_9"] = "http/0.9";
+    RequestHandlerProtocol["HTTP_1_0"] = "http/1.0";
+    RequestHandlerProtocol["TDS_8_0"] = "tds/8.0";
+  })(RequestHandlerProtocol || (RequestHandlerProtocol = {}));
+
+  ({
+    supported: Boolean(typeof Request !== "undefined" && "keepalive" in new Request("https://[::1]"))
+  });
+
+  function extendedEncodeURIComponent(str) {
+    return encodeURIComponent(str).replace(/[!'()*]/g, function (c) {
+      return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+  }
+
+  const StringWrapper = function () {
+    const Class = Object.getPrototypeOf(this).constructor;
+    const Constructor = Function.bind.apply(String, [null, ...arguments]);
+    const instance = new Constructor();
+    Object.setPrototypeOf(instance, Class.prototype);
+    return instance;
+  };
+  StringWrapper.prototype = Object.create(String.prototype, {
+    constructor: {
+      value: StringWrapper,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  Object.setPrototypeOf(StringWrapper, String);
+
   var domain;
 
   // This constructor is used to store event handlers. Instantiating this is
@@ -35277,12 +35508,14 @@ ${toHex(hashedRequest)}`;
       this.partSize = MIN_PART_SIZE;
       this.leavePartsOnError = false;
       this.tags = [];
+      this.maxAttempts = 2;
       this.concurrentUploaders = [];
       this.uploadedParts = [];
       this.isMultiPart = true;
       this.queueSize = options.queueSize || this.queueSize;
       this.partSize = options.partSize || this.partSize;
       this.leavePartsOnError = options.leavePartsOnError || this.leavePartsOnError;
+      this.maxAttempts = options.maxAttempts || this.maxAttempts;
       this.tags = options.tags || this.tags;
       this.client = options.client;
       this.params = options.params;
@@ -35376,84 +35609,43 @@ ${toHex(hashedRequest)}`;
       }
       return this.createMultiPartPromise;
     }
-    async __doConcurrentUpload(dataFeeder) {
-      for await (const dataPart of dataFeeder) {
-        if (this.uploadedParts.length > this.MAX_PARTS) {
-          throw new Error(`Exceeded ${this.MAX_PARTS} as part of the upload to ${this.params.Key} and ${this.params.Bucket}.`);
+    __sleep(time) {
+      return new Promise(function (resolve) {
+        setTimeout(resolve, time);
+      });
+    }
+    async __doConcurrentPartUpload(dataPart, attempts) {
+      if (this.uploadedParts.length > this.MAX_PARTS) {
+        throw new Error(`Exceeded ${this.MAX_PARTS} as part of the upload to ${this.params.Key} and ${this.params.Bucket}.`);
+      }
+      try {
+        if (this.abortController.signal.aborted) {
+          return;
         }
-        try {
+        if (dataPart.partNumber === 1 && dataPart.lastPart) {
+          return await this.__uploadUsingPut(dataPart);
+        }
+        if (!this.uploadId) {
+          const {
+            UploadId
+          } = await this.__createMultipartUpload();
+          this.uploadId = UploadId;
           if (this.abortController.signal.aborted) {
             return;
           }
-          if (dataPart.partNumber === 1 && dataPart.lastPart) {
-            return await this.__uploadUsingPut(dataPart);
-          }
-          if (!this.uploadId) {
-            const {
-              UploadId
-            } = await this.__createMultipartUpload();
-            this.uploadId = UploadId;
-            if (this.abortController.signal.aborted) {
-              return;
-            }
-          }
-          const partSize = byteLength(dataPart.data) || 0;
-          const requestHandler = this.client.config.requestHandler;
-          const eventEmitter = requestHandler instanceof EventEmitter ? requestHandler : null;
-          let lastSeenBytes = 0;
-          const uploadEventListener = (event, request) => {
-            const requestPartSize = Number(request.query["partNumber"]) || -1;
-            if (requestPartSize !== dataPart.partNumber) {
-              return;
-            }
-            if (event.total && partSize) {
-              this.bytesUploadedSoFar += event.loaded - lastSeenBytes;
-              lastSeenBytes = event.loaded;
-            }
-            this.__notifyProgress({
-              loaded: this.bytesUploadedSoFar,
-              total: this.totalBytes,
-              part: dataPart.partNumber,
-              Key: this.params.Key,
-              Bucket: this.params.Bucket
-            });
-          };
-          if (eventEmitter !== null) {
-            eventEmitter.on("xhr.upload.progress", uploadEventListener);
-          }
-          const partResult = await this.client.send(new UploadPartCommand({
-            ...this.params,
-            UploadId: this.uploadId,
-            Body: dataPart.data,
-            PartNumber: dataPart.partNumber
-          }));
-          if (eventEmitter !== null) {
-            eventEmitter.off("xhr.upload.progress", uploadEventListener);
-          }
-          if (this.abortController.signal.aborted) {
+        }
+        const partSize = byteLength(dataPart.data) || 0;
+        const requestHandler = this.client.config.requestHandler;
+        const eventEmitter = requestHandler instanceof EventEmitter ? requestHandler : null;
+        let lastSeenBytes = 0;
+        const uploadEventListener = (event, request) => {
+          const requestPartSize = Number(request.query["partNumber"]) || -1;
+          if (requestPartSize !== dataPart.partNumber) {
             return;
           }
-          if (!partResult.ETag) {
-            throw new Error(`Part ${dataPart.partNumber} is missing ETag in UploadPart response. Missing Bucket CORS configuration for ETag header?`);
-          }
-          this.uploadedParts.push({
-            PartNumber: dataPart.partNumber,
-            ETag: partResult.ETag,
-            ...(partResult.ChecksumCRC32 && {
-              ChecksumCRC32: partResult.ChecksumCRC32
-            }),
-            ...(partResult.ChecksumCRC32C && {
-              ChecksumCRC32C: partResult.ChecksumCRC32C
-            }),
-            ...(partResult.ChecksumSHA1 && {
-              ChecksumSHA1: partResult.ChecksumSHA1
-            }),
-            ...(partResult.ChecksumSHA256 && {
-              ChecksumSHA256: partResult.ChecksumSHA256
-            })
-          });
-          if (eventEmitter === null) {
-            this.bytesUploadedSoFar += partSize;
+          if (event.total && partSize) {
+            this.bytesUploadedSoFar += event.loaded - lastSeenBytes;
+            lastSeenBytes = event.loaded;
           }
           this.__notifyProgress({
             loaded: this.bytesUploadedSoFar,
@@ -35462,13 +35654,75 @@ ${toHex(hashedRequest)}`;
             Key: this.params.Key,
             Bucket: this.params.Bucket
           });
-        } catch (e) {
-          if (!this.uploadId) {
+        };
+        if (eventEmitter !== null) {
+          eventEmitter.on("xhr.upload.progress", uploadEventListener);
+        }
+        const partResult = await this.client.send(new UploadPartCommand({
+          ...this.params,
+          UploadId: this.uploadId,
+          Body: dataPart.data,
+          PartNumber: dataPart.partNumber
+        }));
+        if (eventEmitter !== null) {
+          eventEmitter.off("xhr.upload.progress", uploadEventListener);
+        }
+        if (this.abortController.signal.aborted) {
+          return;
+        }
+        if (!partResult.ETag) {
+          throw new Error(`Part ${dataPart.partNumber} is missing ETag in UploadPart response. Missing Bucket CORS configuration for ETag header?`);
+        }
+        this.uploadedParts.push({
+          PartNumber: dataPart.partNumber,
+          ETag: partResult.ETag,
+          ...(partResult.ChecksumCRC32 && {
+            ChecksumCRC32: partResult.ChecksumCRC32
+          }),
+          ...(partResult.ChecksumCRC32C && {
+            ChecksumCRC32C: partResult.ChecksumCRC32C
+          }),
+          ...(partResult.ChecksumSHA1 && {
+            ChecksumSHA1: partResult.ChecksumSHA1
+          }),
+          ...(partResult.ChecksumSHA256 && {
+            ChecksumSHA256: partResult.ChecksumSHA256
+          })
+        });
+        if (eventEmitter === null) {
+          this.bytesUploadedSoFar += partSize;
+        }
+        this.__notifyProgress({
+          loaded: this.bytesUploadedSoFar,
+          total: this.totalBytes,
+          part: dataPart.partNumber,
+          Key: this.params.Key,
+          Bucket: this.params.Bucket
+        });
+      } catch (e) {
+        if (e.message == "Failed to fetch") {
+          if (attempts > 0) {
+            attempts--;
+            await this.__sleep(3000);
+            await this.__doConcurrentPartUpload(dataPart, attempts);
+          } else {
             throw e;
           }
-          if (this.leavePartsOnError) {
-            throw e;
-          }
+        } else if (!this.uploadId) {
+          throw e;
+        }
+        if (this.leavePartsOnError) {
+          throw e;
+        }
+      }
+    }
+    async __doConcurrentUpload(dataFeeder) {
+      for await (const dataPart of dataFeeder) {
+        try {
+          const attempts = this.maxAttempts;
+          await this.__doConcurrentPartUpload(dataPart, attempts);
+        } catch (error) {
+          throw error;
         }
       }
     }

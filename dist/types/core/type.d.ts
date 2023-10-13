@@ -1,4 +1,4 @@
-import { Progress } from '@aws-sdk/lib-storage';
+import { Progress } from '@4everland/s3-lib-storage';
 import { StreamingBlobPayloadInputTypes } from '@smithy/types';
 export interface verifySignResult extends Credentials {
     expiration: number;

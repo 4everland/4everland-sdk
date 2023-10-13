@@ -8,9 +8,7 @@ import terser from '@rollup/plugin-terser'
 import nodePolyfills from 'rollup-plugin-polyfill-node'
 import replace from '@rollup/plugin-replace'
 
-const isProduction = process.env.NODE_ENV === 'production'
-console.log(isProduction)
-const pkg = 'foreverland'
+const pkg = 'uploadPin'
 const extensions = ['.ts']
 export default {
   input: './src/index.ts',

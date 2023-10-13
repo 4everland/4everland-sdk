@@ -1,10 +1,10 @@
 {
   "name": "@4everland/upload-pin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "./dist/foreverland.cjs.js",
-  "module": "./dist/foreverland.esm.js",
-  "browser": "./dist/foreverland.umd.min.js",
+  "main": "./dist/uploadPin.cjs.js",
+  "module": "./dist/uploadPin.esm.js",
+  "browser": "./dist/uploadPin.umd.min.js",
   "types": "./dist/types/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

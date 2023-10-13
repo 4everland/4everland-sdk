@@ -1,5 +1,6 @@
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
-import { Upload, Progress } from '@aws-sdk/lib-storage'
+import { Upload, Progress } from '@4everland/s3-lib-storage'
+
 import type { PutObjectParams, UploadResult } from './type'
 
 interface BucketClientParams {

@@ -34,7 +34,15 @@ class PinningClient {
       }
     })
   }
-
+  async replacePin(requestid: string, addPin: AddPinParams) {
+    return this.request.post<PinInfo>({
+      url: '/pins/' + requestid,
+      data: addPin,
+      headers: {
+        Authorization: 'Bearer ' + this.accessToken
+      }
+    })
+  }
   async listPin(params?: PinParams) {
     return this.request.get<ListPin>({
       url: '/pins',

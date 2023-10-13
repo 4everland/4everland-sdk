@@ -38587,13 +38587,34 @@ ${toHex(hashedRequest)}`;
         }));
       }
     }, {
-      key: "listPin",
-      value: function listPin(params) {
+      key: "replacePin",
+      value: function replacePin(requestid, addPin) {
         return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
           return _regeneratorRuntime().wrap(function _callee3$(_context3) {
             while (1) switch (_context3.prev = _context3.next) {
               case 0:
-                return _context3.abrupt("return", this.request.get({
+                return _context3.abrupt("return", this.request.post({
+                  url: '/pins/' + requestid,
+                  data: addPin,
+                  headers: {
+                    Authorization: 'Bearer ' + this.accessToken
+                  }
+                }));
+              case 1:
+              case "end":
+                return _context3.stop();
+            }
+          }, _callee3, this);
+        }));
+      }
+    }, {
+      key: "listPin",
+      value: function listPin(params) {
+        return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
+              case 0:
+                return _context4.abrupt("return", this.request.get({
                   url: '/pins',
                   params: Object.assign({
                     match: 'partial',
@@ -38605,9 +38626,9 @@ ${toHex(hashedRequest)}`;
                 }));
               case 1:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
-          }, _callee3, this);
+          }, _callee4, this);
         }));
       }
     }]);

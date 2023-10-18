@@ -1,6 +1,6 @@
 {
-  "name": "upload-pin",
-  "version": "1.0.1",
+  "name": "@4everland/upload-pin",
+  "version": "1.0.2",
   "description": "",
   "main": "./dist/uploadPin.cjs.js",
   "module": "./dist/uploadPin.esm.js",

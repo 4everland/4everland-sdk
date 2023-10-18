@@ -1,5 +1,5 @@
 {
-  "name": "@4everland/upload-pin",
+  "name": "upload-pin",
   "version": "1.0.1",
   "description": "",
   "main": "./dist/uploadPin.cjs.js",

@@ -47,12 +47,12 @@ class BucketClient {
         } catch (error: any) {
           console.log(error)
           if (error.message == 'Failed to fetch') {
-            throw new Error(error.message)
+            throw new Error('network error!')
           }
           if (error.name == 'AbortError') {
             throw new Error('upload aborted!')
           }
-          throw new Error('service error')
+          throw error
         }
       },
       progress: (cb?: (e: Progress) => void) => {

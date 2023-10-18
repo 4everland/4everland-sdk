@@ -35859,7 +35859,7 @@ ${toHex(hashedRequest)}`;
                       _context2.next = 14;
                       break;
                     }
-                    throw new Error(_context2.t0.message);
+                    throw new Error('network error!');
                   case 14:
                     if (!(_context2.t0.name == 'AbortError')) {
                       _context2.next = 16;
@@ -35867,7 +35867,7 @@ ${toHex(hashedRequest)}`;
                     }
                     throw new Error('upload aborted!');
                   case 16:
-                    throw new Error('service error');
+                    throw _context2.t0;
                   case 17:
                   case "end":
                     return _context2.stop();

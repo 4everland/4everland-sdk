@@ -1,7 +1,7 @@
 import { CompleteMultipartUploadCommandOutput, S3 } from '@aws-sdk/client-s3'
 import { Upload, Progress } from '@4everland/s3-lib-storage'
-
 import type { PutObjectParams, UploadResult } from './type'
+import { ErrorBase } from '../utils/error-base'
 
 interface BucketClientParams {
   accessKeyId: string
@@ -45,12 +45,15 @@ class BucketClient {
             cid
           }
         } catch (error: any) {
-          console.log(error)
           if (error.message == 'Failed to fetch') {
             throw new Error('network error!')
           }
-          if (error.name == 'AbortError') {
-            throw new Error('upload aborted!')
+          if (
+            error.name == 'InvalidAccessKeyId' ||
+            error.name == 'InvalidTokenId' ||
+            error.name == 'SignatureDoesNotMatch'
+          ) {
+            throw new ErrorBase(error.name, 403, error.message)
           }
           throw error
         }

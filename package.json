@@ -1,6 +1,6 @@
 {
   "name": "@4everland/upload-pin",
-  "version": "1.0.2",
+  "version": "1.1.1",
   "description": "",
   "main": "./dist/uploadPin.cjs.js",
   "module": "./dist/uploadPin.esm.js",
@@ -18,9 +18,9 @@
     "upload",
     "ipfs"
   ],
-  "author": "yepCing",
-  "repository": "https://github.com/yepCing/4everland-sdk",
-  "homepage": "https://github.com/yepCing/4everland-sdk",
+  "author": "4everland",
+  "repository": "https://github.com/4everland/4everland-sdk",
+  "homepage": "https://github.com/4everland/4everland-sdk",
   "license": "ISC",
   "devDependencies": {
     "@aws-sdk/types": "^3.391.0",
